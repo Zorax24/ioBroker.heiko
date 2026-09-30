@@ -242,6 +242,51 @@ function instrumentAdapter(adapterExports) {
             return;
         }
         Object.defineProperty(instance, '__heikoOfflineStateHook', { value: true });
+        const originalOnReady = instance.onReady;
+        if (typeof originalOnReady === 'function' && process.env.HEIKO_TEST_LIFECYCLE_LOG) {
+            instance.onReady = async function (...args) {
+                appendLifecycleEvent('ready-task-start');
+                try {
+                    const result = await originalOnReady.apply(this, args);
+                    appendLifecycleEvent('ready-task-settled');
+                    return result;
+                } catch (error) {
+                    appendLifecycleEvent('ready-task-failed', {
+                        name: error instanceof Error ? error.name : typeof error,
+                    });
+                    throw error;
+                }
+            };
+        }
+
+        const originalOnStateChange = instance.onStateChange;
+        if (typeof originalOnStateChange === 'function' && process.env.HEIKO_TEST_LIFECYCLE_LOG) {
+            let stateChangeSequence = 0;
+            instance.onStateChange = async function (id, state) {
+                if (!state || state.ack !== false) {
+                    return originalOnStateChange.call(this, id, state);
+                }
+                const normalizedId = `${id}`.replace(/^[^.]+\.\d+\./, '');
+                const sequence = ++stateChangeSequence;
+                appendLifecycleEvent('state-change-enter', { id: normalizedId, sequence });
+                try {
+                    await originalOnStateChange.call(this, id, state);
+                } catch (error) {
+                    appendLifecycleEvent('state-change-failed', {
+                        id: normalizedId,
+                        sequence,
+                        name: error instanceof Error ? error.name : typeof error,
+                    });
+                    throw error;
+                }
+                appendLifecycleEvent('state-change-settled', {
+                    id: normalizedId,
+                    sequence,
+                    controlCommandIdle: this.activeControlCommand === null,
+                });
+            };
+        }
+
         instance.setStateChangedAsync = async function (id, ...args) {
             const localId = `${id}`;
             const normalizedId = localId.replace(/^[^.]+\.\d+\./, '');

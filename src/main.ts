@@ -329,6 +329,7 @@ class Heiko extends utils.Adapter {
     private pendingDirectWrite: PendingDirectWrite | null = null;
     private activeControlCommand: object | null = null;
     private readonly controlTasks = new Set<Promise<unknown>>();
+    private readyTask: Promise<void> | null = null;
     private latestSettings: Record<string, number | null> = {};
     private unloading = false;
 
@@ -338,7 +339,10 @@ class Heiko extends utils.Adapter {
             name: 'heiko',
         });
 
-        this.on('ready', this.onReady.bind(this));
+        this.on('ready', () => {
+            this.readyTask = this.onReady();
+            this.trackControlTask(this.readyTask);
+        });
         this.on('stateChange', (id, state) => {
             this.trackControlTask(this.onStateChange(id, state));
         });
@@ -390,6 +394,9 @@ class Heiko extends utils.Adapter {
             ack: true,
         });
 
+        if (this.unloading) {
+            return;
+        }
         if (this.config.bridgeEnabled !== false) {
             this.startBridge();
         } else {
@@ -401,12 +408,25 @@ class Heiko extends utils.Adapter {
     private async onUnload(callback: () => void): Promise<void> {
         try {
             this.unloading = true;
+            if (this.pendingDirectWrite) {
+                this.cancelPendingDirectWrite(this.pendingDirectWrite, new Error('Adapter is stopping'));
+            }
+            this.activeControlCommand = null;
+
+            if (this.readyTask) {
+                const [readyResult] = await Promise.allSettled([this.readyTask]);
+                if (readyResult.status === 'rejected') {
+                    this.log.error(
+                        `Adapter startup did not complete before unload: ${this.errorMessage(readyResult.reason)}`,
+                    );
+                }
+            }
+
             const controlTasks = Array.from(this.controlTasks);
             const bridgeProcessing = Array.from(this.sessions, (session) => session.processing);
             if (this.pendingDirectWrite) {
                 this.cancelPendingDirectWrite(this.pendingDirectWrite, new Error('Adapter is stopping'));
             }
-            this.activeControlCommand = null;
             this.stopCloudControl();
             this.stopBridge();
             await Promise.allSettled([...bridgeProcessing, ...controlTasks]);

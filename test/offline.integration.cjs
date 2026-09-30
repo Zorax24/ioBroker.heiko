@@ -179,6 +179,26 @@ async function waitForLogRecord(filePath, predicate, timeoutMs, description) {
     return match;
 }
 
+function latestStateChangeSequence(filePath) {
+    return readJsonLines(filePath).reduce(
+        (latest, entry) => (entry.event === 'state-change-enter' ? Math.max(latest, entry.sequence) : latest),
+        0,
+    );
+}
+
+async function waitForControlTaskSettled(filePath, afterSequence, localId, description) {
+    return waitForLogRecord(
+        filePath,
+        (entry) =>
+            entry.event === 'state-change-settled' &&
+            entry.sequence > afterSequence &&
+            entry.id === localId &&
+            entry.controlCommandIdle === true,
+        5_000,
+        description,
+    );
+}
+
 async function stateSnapshot(harness, localIds) {
     const states = await Promise.all(localIds.map(async (localId) => [localId, await getState(harness, localId)]));
     return Object.fromEntries(states);
@@ -1383,6 +1403,7 @@ tests.integration(adapterRoot, {
             });
 
             it('rejects cloud behind a suspended direct write, without replacing its readback slot', async () => {
+                const commandSequence = latestStateChangeSequence(lifecycleLog);
                 requestAdapterPause(pauseRequestFile, releasePrefix, 1);
                 await writeState(harness, 'Einstellungen.Schnelleinstellungen.EinAus', true);
                 await waitForLogRecord(
@@ -1410,6 +1431,12 @@ tests.integration(adapterRoot, {
                 await waitForState(harness, 'control.lastResult', (value) => value === 'pending readback');
                 unit.socket.write(makeSettingsFrame({ mn: TEST_MN_A, values: { 0: 1, 3: 1 } }));
                 await waitForState(harness, 'control.lastResult', (value) => value === 'success - confirmed by CMD02');
+                await waitForControlTaskSettled(
+                    lifecycleLog,
+                    commandSequence,
+                    'Einstellungen.Schnelleinstellungen.EinAus',
+                    'first direct write handler to release its reservation',
+                );
                 assert.equal(countCloudRequests(requestLog, '/control'), 0);
             });
 
@@ -1420,6 +1447,7 @@ tests.integration(adapterRoot, {
                 const syncBeforeCloudWrite = await getValue(harness, 'control.lastSync');
                 fs.writeFileSync(resultFile, 'pending');
                 requestAdapterPause(pauseRequestFile, releasePrefix, 2);
+                const cloudCommandSequence = latestStateChangeSequence(lifecycleLog);
                 await writeState(harness, 'control.mode', 5);
                 await waitForLogRecord(
                     lifecycleLog,
@@ -1459,9 +1487,15 @@ tests.integration(adapterRoot, {
                     5_000,
                 );
                 await waitForState(harness, 'control.mode', (value) => value === modeBeforeCloudWrite, 5_000);
-                await delay(50);
+                await waitForControlTaskSettled(
+                    lifecycleLog,
+                    cloudCommandSequence,
+                    'control.mode',
+                    'cloud write handler to release its reservation after success',
+                );
 
                 requestAdapterPause(pauseRequestFile, releasePrefix, 3);
+                const directCommandSequence = latestStateChangeSequence(lifecycleLog);
                 await writeState(harness, 'control.power', true);
                 await waitForLogRecord(
                     lifecycleLog,
@@ -1485,6 +1519,12 @@ tests.integration(adapterRoot, {
                 await waitForState(harness, 'control.lastResult', (value) => value === 'pending readback');
                 unit.socket.write(makeSettingsFrame({ mn: TEST_MN_A, values: { 0: 1, 3: 1 } }));
                 await waitForState(harness, 'control.lastResult', (value) => value === 'success - confirmed by CMD02');
+                await waitForControlTaskSettled(
+                    lifecycleLog,
+                    directCommandSequence,
+                    'control.power',
+                    'direct write handler to release its reservation after confirmation',
+                );
                 assert.equal(countCloudRequests(requestLog, '/control'), beforeCloud);
             });
 
@@ -1503,6 +1543,7 @@ tests.integration(adapterRoot, {
                     markPhase('cloud-error-command');
                     fs.writeFileSync(resultFile, 'reject');
                     const commandsBeforeFailure = countCloudRequests(requestLog, '/control');
+                    const failedCommandSequence = latestStateChangeSequence(lifecycleLog);
                     await writeState(harness, 'control.mode', 5);
                     await waitUntil(
                         async () => countCloudRequests(requestLog, '/control') > commandsBeforeFailure,
@@ -1511,12 +1552,18 @@ tests.integration(adapterRoot, {
                     );
                     await waitForState(harness, 'control.lastResult', (value) => value === 'failed', 5_000);
                     await waitForState(harness, 'control.mode', (value) => value === modeBeforeCloudWrite, 5_000);
-                    await delay(50);
+                    await waitForControlTaskSettled(
+                        lifecycleLog,
+                        failedCommandSequence,
+                        'control.mode',
+                        'cloud failure handler to release its reservation',
+                    );
 
                     markPhase('cloud-command-after-error');
                     fs.writeFileSync(resultFile, 'success');
                     const commandsBeforeSuccess = countCloudRequests(requestLog, '/control');
                     const syncBeforeSuccess = await getValue(harness, 'control.lastSync');
+                    const recoveredCommandSequence = latestStateChangeSequence(lifecycleLog);
                     await writeState(harness, 'control.mode', 5);
                     await waitUntil(
                         async () => countCloudRequests(requestLog, '/control') > commandsBeforeSuccess,
@@ -1530,16 +1577,27 @@ tests.integration(adapterRoot, {
                         (value) => typeof value === 'string' && value !== syncBeforeSuccess,
                         5_000,
                     );
-                    await delay(50);
+                    await waitForControlTaskSettled(
+                        lifecycleLog,
+                        recoveredCommandSequence,
+                        'control.mode',
+                        'recovered cloud handler to release its reservation',
+                    );
 
                     markPhase('direct-write-after-cloud-recovery');
+                    const disconnectedDirectSequence = latestStateChangeSequence(lifecycleLog);
                     await writeState(harness, 'Einstellungen.HeizKühlkreis1.KühlSolltemperatur', 22);
                     await unit.reader.nextFrame(frameIs(0x05));
                     await waitForState(harness, 'control.lastResult', (value) => value === 'pending readback');
                     markPhase('cancel-direct-write-on-session-close');
                     unit.socket.destroy();
                     await waitForState(harness, 'control.lastResult', (value) => value === 'failed', 5_000);
-                    await delay(50);
+                    await waitForControlTaskSettled(
+                        lifecycleLog,
+                        disconnectedDirectSequence,
+                        'Einstellungen.HeizKühlkreis1.KühlSolltemperatur',
+                        'disconnected direct handler to release its reservation',
+                    );
 
                     markPhase('reconnect-and-restore-direct-readiness');
                     unit = await connectLoopback(await getValue(harness, 'bridge.listenPort'));
@@ -1548,14 +1606,21 @@ tests.integration(adapterRoot, {
                     await waitForState(harness, 'control.directWriteReady', (value) => value === true, 3_000);
 
                     markPhase('direct-readback-timeout');
+                    const timeoutDirectSequence = latestStateChangeSequence(lifecycleLog);
                     await writeState(harness, 'control.power', false);
                     await unit.reader.nextFrame(frameIs(0x05));
                     await waitForState(harness, 'control.lastResult', (value) => value === 'pending readback');
                     await unit.reader.nextFrame(frameIs(0x07), 3_000);
                     await waitForState(harness, 'control.lastResult', (value) => value === 'failed', 15_000);
-                    await delay(50);
+                    await waitForControlTaskSettled(
+                        lifecycleLog,
+                        timeoutDirectSequence,
+                        'control.power',
+                        'timed-out direct handler to release its reservation',
+                    );
 
                     markPhase('direct-write-after-readback-timeout');
+                    const finalDirectSequence = latestStateChangeSequence(lifecycleLog);
                     await writeState(harness, 'control.power', true);
                     const recovered = await unit.reader.nextFrame(frameIs(0x05));
                     assert.equal(
@@ -1568,6 +1633,12 @@ tests.integration(adapterRoot, {
                         harness,
                         'control.lastResult',
                         (value) => value === 'success - confirmed by CMD02',
+                    );
+                    await waitForControlTaskSettled(
+                        lifecycleLog,
+                        finalDirectSequence,
+                        'control.power',
+                        'final direct handler to release its reservation',
                     );
                     markPhase('complete');
                 } catch (error) {

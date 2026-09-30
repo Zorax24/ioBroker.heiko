@@ -6,10 +6,12 @@
 - Add translated object labels and clearer configuration help.
 - Reject corrupt frames for telemetry and write confirmation while preserving transparent forwarding.
 - Keep local telemetry available during upstream outages and improve configuration, lifecycle and command validation.
+- Wait for startup initialization during early shutdown and avoid starting listeners after shutdown begins.
 - Refresh direct-write readiness after the first valid device frame, including reconnection.
 - Serialize direct and cloud commands and require fresh, same-session readback for direct writes.
 - Reject mixed-device cached frames and suppress raw command history when raw retention is disabled.
 - Add isolated simulated integration checks and a limited installation-package file selection.
+- Make cross-platform test checkouts deterministic and remove an undeclared release-tool command.
 
 ## 0.12.3
 
