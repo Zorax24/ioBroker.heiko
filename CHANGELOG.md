@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.13.1
+
+- Initialize known bridge status and counter values with acknowledged, valid quality metadata instead of retaining object-creation placeholders.
+- Add startup-quality regression coverage for disabled manufacturer forwarding.
+
 ## 0.13.0
 
 - Prepare a private distribution with English and German documentation and stable existing state IDs and configuration keys.

@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "heiko",
-        "version": "0.13.0",
+        "version": "0.13.1",
         "news": {
+            "0.13.1": {
+                "en": "Initialize bridge connection states and counters with valid quality metadata, including disabled manufacturer forwarding.",
+                "de": "Verbindungsstatus und Zähler der Bridge mit gültigen Qualitätsmetadaten initialisieren, auch bei deaktivierter Herstellerweiterleitung."
+            },
             "0.13.0": {
                 "en": "Prepare a private distributable release with English and German documentation, translated labels, isolated tests and more robust local bridge processing.",
                 "de": "Private Weitergabe mit deutscher und englischer Dokumentation, übersetzten Bezeichnungen, isolierten Tests und robusterer lokaler Telegrammverarbeitung vorbereitet."
@@ -78,10 +82,6 @@
             "0.5.2": {
                 "en": "Add a protected one-shot command that validates and republishes the latest genuine CMD01 realtime and CMD02 settings frames through the active transparent MyHeatPump connection.",
                 "de": "Geschuetzten Einmal-Befehl hinzugefuegt, der die letzten echten CMD01-Echtzeit- und CMD02-Einstellungsframes validiert und ueber die aktive transparente MyHeatPump-Verbindung erneut sendet."
-            },
-            "0.5.1": {
-                "en": "Correct the documented MyHeatPump device upstream to www.myheatpump.com:18899, transparently decode both wire directions, add forwarding counters and reconnect the upstream automatically.",
-                "de": "Dokumentierten MyHeatPump-Geraete-Upstream auf www.myheatpump.com:18899 korrigiert, beide Uebertragungsrichtungen transparent dekodiert, Weiterleitungszaehler hinzugefuegt und automatische Upstream-Wiederverbindung umgesetzt."
             }
         },
         "titleLang": {

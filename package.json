@@ -1,6 +1,6 @@
 {
     "name": "iobroker.heiko",
-    "version": "0.13.0",
+    "version": "0.13.1",
     "description": "Run a W600 TCP bridge and confirmed direct control for Heiko/Sprsun/Neoheat heat pumps",
     "author": {
         "name": "Zorax24"

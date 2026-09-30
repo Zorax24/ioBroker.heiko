@@ -334,6 +334,51 @@ tests.integration(adapterRoot, {
     loglevel: 'warn',
     waitBeforeStartupSuccess: 400,
     defineAdditionalTests({ suite }) {
+        suite('offline startup runtime status initialization', (getHarness) => {
+            let harness;
+
+            before(async () => {
+                harness = getHarness();
+                await harness.changeAdapterConfig('heiko', {
+                    native: {
+                        bridgeEnabled: false,
+                        upstreamEnabled: false,
+                    },
+                });
+                await startAdapter(harness);
+            });
+
+            after(async () => {
+                if (harness?.isAdapterRunning()) {
+                    await harness.stopAdapter();
+                }
+            });
+
+            it('initializes known runtime states with good quality when upstream is disabled', async () => {
+                await waitForState(harness, 'bridge.status', (value) => value === 'bridge disabled');
+
+                const expected = {
+                    'info.connection': false,
+                    'info.bridgeListening': false,
+                    'info.lastError': '',
+                    'bridge.activeClients': 0,
+                    'bridge.upstreamConnected': false,
+                    'bridge.bytesUnitToUpstream': 0,
+                    'bridge.bytesUpstreamToUnit': 0,
+                    'bridge.upstreamReconnects': 0,
+                };
+
+                for (const [localId, val] of Object.entries(expected)) {
+                    const state = await getState(harness, localId);
+                    assert.deepEqual(
+                        { val: state?.val, ack: state?.ack, q: state?.q },
+                        { val, ack: true, q: 0 },
+                        `${localId} must be explicitly initialized as a valid acknowledged state`,
+                    );
+                }
+            });
+        });
+
         suite('offline local package lifecycle and direct-write routing', (getHarness) => {
             let harness;
             let unit;

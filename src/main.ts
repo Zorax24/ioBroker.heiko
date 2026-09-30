@@ -373,14 +373,14 @@ class Heiko extends utils.Adapter {
         await this.subscribeStatesAsync('command.*');
         await this.subscribeStatesAsync('control.*');
         await this.subscribeStatesAsync('Einstellungen.*');
-        await this.setStateChangedAsync('info.connection', false, true);
-        await this.setStateChangedAsync('info.bridgeListening', false, true);
-        await this.setStateChangedAsync('info.lastError', '', true);
-        await this.setStateChangedAsync('bridge.activeClients', 0, true);
-        await this.setStateChangedAsync('bridge.upstreamConnected', false, true);
-        await this.setStateChangedAsync('bridge.bytesUnitToUpstream', 0, true);
-        await this.setStateChangedAsync('bridge.bytesUpstreamToUnit', 0, true);
-        await this.setStateChangedAsync('bridge.upstreamReconnects', 0, true);
+        await this.setStateAsync('info.connection', { val: false, ack: true, q: 0 });
+        await this.setStateAsync('info.bridgeListening', { val: false, ack: true, q: 0 });
+        await this.setStateAsync('info.lastError', { val: '', ack: true, q: 0 });
+        await this.setStateAsync('bridge.activeClients', { val: 0, ack: true, q: 0 });
+        await this.setStateAsync('bridge.upstreamConnected', { val: false, ack: true, q: 0 });
+        await this.setStateAsync('bridge.bytesUnitToUpstream', { val: 0, ack: true, q: 0 });
+        await this.setStateAsync('bridge.bytesUpstreamToUnit', { val: 0, ack: true, q: 0 });
+        await this.setStateAsync('bridge.upstreamReconnects', { val: 0, ack: true, q: 0 });
         await this.setStateAsync('control.cloudConnected', { val: false, ack: true });
         await this.setStateAsync('control.available', { val: false, ack: true });
         await this.setStateAsync('control.writesEnabled', {
