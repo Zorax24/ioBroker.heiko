@@ -6,7 +6,7 @@ Diese Anleitung behandelt Installation und Betrieb des ioBroker-Adapters.
 
 ## Lokales Releasepaket installieren
 
-Dieses Repository ist privat. Melde dich bei GitHub an, öffne die [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) und lade `iobroker.heiko-0.13.1.tgz` als dauerhaft aufbewahrte lokale Datei herunter. Tokens oder Zugangsdaten gehören nicht in Befehle, Adaptereinstellungen oder Supportberichte. Behalte das Archiv am Installationsort: npm vermerkt eine lokale Dateiabhängigkeit und kann das Paket bei späterer Paketpflege erneut benötigen.
+Öffne die [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) und lade `iobroker.heiko-0.13.1.tgz` und `SHA256SUMS` herunter. Prüfe vor der Installation die Prüfsumme. Falls GitHub eine Anmeldung verlangt, verwende ein Konto mit Zugriff auf das Repository. Tokens oder Zugangsdaten gehören nicht in Befehle, Adaptereinstellungen oder Supportberichte. Behalte das Archiv am Installationsort: npm vermerkt eine lokale Dateiabhängigkeit und kann das Paket bei späterer Paketpflege erneut benötigen.
 
 Der geprüfte lokale Paketweg verwendet das ioBroker-Controller-Projektverzeichnis; die Paketdatei muss dort liegen:
 
@@ -38,7 +38,7 @@ Vor einem Update:
 1. Ein wiederherstellbares ioBroker-Backup erstellen und die Konfiguration der `heiko`-Instanz dokumentieren.
 2. Das vorherige Adapterpaket aufbewahren und die installierte Version notieren.
 3. Bei Updates von Versionen vor `0.12.0` Skripte, Aliase, Historien und Dashboards auf alte `parNN`-/`parameters.*`-IDs prüfen; der Katalog verwendet beschreibende `Einstellungen.*`-IDs.
-4. Das authentifizierte Releasepaket installieren und die Instanzkonfiguration vor dem Aktivieren prüfen.
+4. Das heruntergeladene Releasepaket prüfen und installieren und die Instanzkonfiguration vor dem Aktivieren kontrollieren.
 
 Die Aktivierung des Updates startet den Adapter neu und unterbricht W600-/Upstream-Verbindungen kurz. Diese Unterbrechung einplanen; nicht den gesamten ioBroker-Controller neu starten. Eine Mapping-Schema-Aktualisierung kann alte Telemetrie leeren, bis neue gültige Frames eintreffen. Nach dem Update Instanzgesundheit, Listener, W600-Verbindung, Telemetrieaktualität und Upstream getrennt prüfen. Abhängige Skripte und Steuerungen vor dem Fortsetzen von Automationen kontrollieren.
 

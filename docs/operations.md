@@ -6,7 +6,7 @@ This guide covers installing and operating the ioBroker adapter.
 
 ## Install The Local Release Package
 
-This repository is private. Sign in to GitHub, open the [`v0.13.1` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1), and download `iobroker.heiko-0.13.1.tgz` to a retained local file. Do not place tokens or account credentials in commands, adapter settings, or support reports. Keep the archive at its installed location: npm records a local-file dependency and may need it again during package maintenance.
+Open the [`v0.13.1` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) and download `iobroker.heiko-0.13.1.tgz` and `SHA256SUMS`. Verify the checksum before installation. If GitHub requests sign-in, use an account with repository access. Do not place tokens or account credentials in commands, adapter settings, or support reports. Keep the archive at its installed location: npm records a local-file dependency and may need it again during package maintenance.
 
 The tested local package route uses the ioBroker controller project directory and the package file in that directory:
 
@@ -38,7 +38,7 @@ Before updating:
 1. Create a restorable ioBroker backup and record the `heiko` instance configuration.
 2. Retain the previous adapter package and note the installed version.
 3. When upgrading from before `0.12.0`, check scripts, aliases, history, and dashboards for legacy `parNN`/`parameters.*` IDs; the catalog uses descriptive `Einstellungen.*` IDs.
-4. Install the authenticated release package and review the instance configuration before enabling it.
+4. Verify and install the downloaded release package and review the instance configuration before enabling it.
 
 Activating an update restarts the adapter and briefly interrupts W600/upstream connections. Schedule that interruption; do not restart the entire ioBroker controller. A mapping-schema update may clear old telemetry until the next valid frames arrive. After an update, verify instance health, listener state, W600 connectivity, telemetry freshness, and upstream state separately. Review dependent scripts and controls before resuming automations.
 

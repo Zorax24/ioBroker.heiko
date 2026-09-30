@@ -10,11 +10,19 @@ Dieses Projekt wurde mit KI-Unterstützung nach einem Vibe-Coding-Ansatz entwick
 
 Der Adapter nimmt die eingehende TCP-Verbindung des W600 an, kann deren Datenstrom transparent zum MyHeatPump-Geräteserver weiterleiten und zugeordnete Telemetrie als ioBroker-States dekodieren. Optionale direkte W600-Steuerung und ein separater MyHeatPump-Cloud-API-Client sind verfügbar. Protokoll- und State-Zuordnungen stehen in [MAPPING.md](MAPPING.md).
 
+## Funktionen
+
+- Temperaturen, Verdichterfrequenz, Pumpen-/Lüfterzustände und den wirksamen Vorlauf-Sollwert direkt in ioBroker auslesen.
+- Ein/Aus und Betriebsart schalten sowie Heiz-, Kühl- und Warmwasser-Sollwerte über die lokale W600-Verbindung einstellen.
+- 128 zugeordnete Einstellungen mit verständlichen Bezeichnungen, dokumentierten Wertebereichen und Rücklesebestätigung bei schreibbaren Parametern nutzen.
+- Transparente MyHeatPump-Weiterleitung in beide Richtungen aktivieren oder mit konfigurierbarer ACK-Behandlung lokal arbeiten.
+- Verbindungen, Wiederverbindungen und Diagnosen ohne zusätzlichen Container oder MQTT-Bridge überwachen.
+
 ## Kompatibilität
 
 Validiert wurde die gemeldete HEIKO-THERMAL-12-Installation mit W600. Die genaue Regler-/W600-Firmware ist unbekannt; Kompatibilität mit anderen Modellen, Firmwareständen oder optionalen Sensoren wird nicht behauptet.
 
-Der Adapter wird an dieser Anlage dauerhaft produktiv eingesetzt. Der Betreiber bestätigt funktionierende Kommunikation und Steuerung der Wärmepumpe. Auch Version `0.13.1` bestand die Live-Prüfung von Update, Auslesung und Weiterleitung; bei dieser Wartungsprüfung wurden bewusst keine zusätzlichen Schaltbefehle ausgelöst.
+Der Adapter wird an einer HEIKO THERMAL 12 dauerhaft produktiv eingesetzt, einschließlich Kommunikation und Wärmepumpensteuerung. Softwareprüfungen und Live-Update-Abnahme sind unter [Validierung](docs/validation.de.md) dokumentiert.
 
 ## Schnellstart
 
@@ -25,9 +33,9 @@ Der Adapter wird an dieser Anlage dauerhaft produktiv eingesetzt. Der Betreiber 
 - Ein Regler/W600 mit dem dokumentierten Frame-Format und ein Netzwerkpfad vom W600 zum ioBroker-Host. Sensornamen bezeichnen Protokollfelder und garantieren nicht, dass jeder Sensor eingebaut ist oder Werte liefert.
 - Bei aktivierter transparenter Weiterleitung benötigt der ioBroker-Host ausgehenden TCP-Zugriff auf `www.myheatpump.com:18899`.
 
-### Installation aus dem privaten Release
+### Release installieren
 
-Dieses Repository ist privat. Berechtigte GitHub-Nutzer laden `iobroker.heiko-0.13.1.tgz` über die private [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) herunter. Als lokale Datei im ioBroker-Controller-Projektverzeichnis ablegen. Keine unauthentifizierte Download-URL und keine Tokens oder Kontodaten in Befehlen oder Diagnoseberichten verwenden.
+Lade `iobroker.heiko-0.13.1.tgz` und `SHA256SUMS` von der [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) herunter. Prüfe die Prüfsumme und behalte das Paket als lokale Datei im ioBroker-Controller-Projektverzeichnis. Falls GitHub eine Anmeldung verlangt, verwende ein Konto mit Zugriff auf das Repository. Tokens oder Kontodaten gehören niemals in Installationsbefehle oder Diagnoseberichte.
 
 Der geprüfte lokale Paketweg wird aus diesem Controller-Verzeichnis ausgeführt:
 
@@ -36,9 +44,15 @@ npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
 iobroker add heiko --enabled false
 ```
 
-Der lokale Tarball wurde in einer Debian-13-Entwicklungsinstanz für ioBroker installiert und einem Smoke-Test unterzogen. Die Instanz wird deaktiviert angelegt; prüfe ihre native Konfiguration vor dem Start. Die [Validierung](docs/validation.de.md) beschreibt die passive Live-Abnahme und ihre Grenzen. Die tatsächlichen Ergebnisse je Commit zeigt der private CI-Workflow unter [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); die Definition der Matrix belegt nicht, dass alle Jobs bestanden sind.
+Die Instanz wird deaktiviert angelegt; prüfe ihre Konfiguration vor dem Start. Dieser Installationsweg mit dem Release-Paket wurde in einer Debian-13-ioBroker-Umgebung geprüft. Abgeschlossene Software- und Live-Prüfungen stehen unter [Validierung](docs/validation.de.md), automatisierte Ergebnisse unter [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions).
 
-### Erstkonfiguration
+## Wärmepumpe verbinden
+
+1. Öffne die HEIKO-Instanzkonfiguration in ioBroker Admin. Wähle einen freien TCP-Listen-Port (Vorgabe `8899`) und entscheide, ob an MyHeatPump weitergeleitet werden soll.
+2. Sichere das bisherige Ziel des W600. Stelle dessen vorhandene TCP-Clientverbindung auf die erreichbare LAN-/VPN-Adresse deines ioBroker-Hosts und den eingestellten Listen-Port um.
+3. Starte die Instanz und warte auf frische Messwerte und Einstellungen. Prüfe Verbindung und Datenzeitstempel, bevor du direkte Schreibzugriffe aktivierst.
+
+Das W600 baut die Verbindung auf. `0.0.0.0` ist eine Listen-Bind-Adresse, niemals das Verbindungsziel des W600. Der Webport von ioBroker Admin ist ein anderer Dienst. Den W600-Listener nicht im Internet freigeben.
 
 Paketvorgaben:
 
@@ -56,7 +70,7 @@ Prüfe Bind-Adresse und Firewall vor dem ersten Start. Für einen lokalen Test v
 
 Prüfe nach dem Start `info.bridgeListening`. Nach Verbindung des W600 prüfe `info.connection`, `bridge.activeClients`, `meta.last_seen` und bei aktivierter Weiterleitung `bridge.upstreamConnected`. Eine Socket-Verbindung allein beweist keine aktuelle Telemetrie. Siehe [Betrieb und Fehlersuche](docs/operations.de.md).
 
-## Bridge und Datenfluss
+## Herstellerweiterleitung
 
 ```text
 W600-TCP-Client -> ioBroker.heiko-Listener -> MyHeatPump-Geräteserver
@@ -64,11 +78,20 @@ W600-TCP-Client -> ioBroker.heiko-Listener -> MyHeatPump-Geräteserver
                          +-> passive Frame-Dekodierung in ioBroker-States
 ```
 
-Bei `upstreamEnabled=true` werden Datenblöcke in beide Richtungen unverändert weitergeleitet; eine passive Kopie wird für ioBroker dekodiert. Das schließt herstellerseitige CMD05-Frames ein: `directWritesEnabled` und `cloudWritesEnabled` steuern nur vom Adapter initiierte Schreibzugriffe. Sie filtern keine weitergeleiteten Daten und sind keine Firewall-Regeln. `autoAckWithoutUpstream` ist standardmäßig false. Bei ausdrücklicher Aktivierung bestätigt der Adapter gültige CMD01-/CMD02-Frames lokal, solange der Upstream nicht verfügbar ist, sowohl bei absichtlich deaktivierter Weiterleitung als auch bei Verbindungsabbruch. Lokale ACKs emulieren weder Cloud noch App. Die simulierte Integrationssuite prüfte Weiterleitungs-Wiederherstellung und lokales ACK-Verhalten; die passive Live-Abnahme bestätigte separat Auslesung und Weiterleitung in beide Richtungen. Auto-ACK-Fallback und physische Steuerung wurden live nicht geprüft.
+Die Weiterleitung wird in den Instanzeinstellungen konfiguriert:
+
+- **Ein (`upstreamEnabled=true`):** Den vollständigen W600-TCP-Datenstrom an MyHeatPump und Antworten zurück weiterleiten. Dazu gehören Gerätekennungen, Messwerte, Betriebszustände und Einstellungen. Herstellerseitige Befehle können die Wärmepumpe verändern. Die TCP-Weiterleitung wird vom Adapter nicht verschlüsselt.
+- **Aus (`upstreamEnabled=false`):** Keine Herstellerverbindung aufbauen. Lokale Dekodierung und freigegebene Direktsteuerungen bleiben verfügbar. Für lokale Bestätigungen gültiger CMD01-/CMD02-Frames `autoAckWithoutUpstream` ausdrücklich aktivieren. Lokale ACKs ersetzen keinen Cloud-/App-Zugriff und löschen keine bereits beim Hersteller gespeicherten Daten.
+
+Der Adapter leitet Bytes unverändert weiter und dekodiert eine passive Kopie. `directWritesEnabled` und `cloudWritesEnabled` betreffen nur adapterseitige Schreibzugriffe; sie filtern keine weitergeleiteten Herstellerbefehle und sind keine Firewall-Regeln. Der separate Cloud-API-Client ist optional und wird weder für die TCP-Weiterleitung noch für lokale W600-Steuerungen benötigt.
 
 Verwende eine Bridge-Instanz pro Wärmepumpe. Jede Bridge-Instanz benötigt einen eindeutigen Listen-Port. Telemetrie mehrerer W600-Clients teilt sich den ioBroker-Objektnamensraum der Instanz; direkte Schreibzugriffe benötigen genau eine aktive W600-Sitzung und werden bei Mehrdeutigkeit abgewiesen. Nach einer Wiederverbindung aktualisiert der erste gültige Geräte-Frame die Direkt-Schreibbereitschaft für die neue Sitzung.
 
-## States und Steuerungen
+## Alltagsbedienung und Datenpunkte
+
+Die Alltagssteuerungen sind `control.power`, `control.mode`, `control.heatingSetpoint`, `control.coolingSetpoint` und `control.hotWaterSetpoint`. Aktiviere direkte W600-Schreibzugriffe bewusst in den Instanzeinstellungen und prüfe vor der Bedienung `control.directWriteReady`. Schreibzugriffe werden nacheinander abgearbeitet und erst nach frischer, passender Einstellungs-Rückmeldung als erfolgreich gemeldet. Nach einem Timeout vor einem erneuten Versuch den aktuellen Wert prüfen.
+
+Bei aktiver Heizkurve zeigt `status.effectiveFlowSetpoint` den wirksamen Vorlauf-Sollwert. `control.heatingSetpoint` ist der feste Heiz-Sollwert ohne Heizkurve.
 
 - `status.*`: Betriebsart/Aktivität, gemeldete Verdichter-/Lüfter-/Pumpenstates, Durchflusswächter, Abtauung und effektiver Vorlauf-Sollwert.
 - `realtime.*`: zugeordnete Messwerte und `realtime.rawJson` für CMD01-Werte.
@@ -79,13 +102,25 @@ Verwende eine Bridge-Instanz pro Wärmepumpe. Jede Bridge-Instanz benötigt eine
 
 `status.compressorDemand` wird aus einem von null verschiedenen Regler-Funktionscode abgeleitet. Es ist eine Aktivitätsanzeige, keine Inverter-Startfreigabe oder Relaisrückmeldung. `status.compressorRunning` bildet separat `realtime.Frequency > 0` gemäß gemeldetem Wert ab; keiner der States beweist einen elektrischen Ausgang oder physische Motordrehung. Nicht verfügbare Werte wie `-99`, NaN oder nicht endliche Zahlen sind keine Nullmessungen.
 
-Direkte Steuerungen und Expertenparameter sind standardmäßig deaktiviert. Bestätigte Werte, Grenzen, Rücklesebedingungen, Anforderungen an zwischengespeicherte Daten und Einschränkungen stehen unter [Steuerungen](docs/controls.de.md). Softwaretests belegen keinen sicheren Betrieb an einer konkreten Anlage. Schreibzugriffe nur nach anlagenspezifischer Prüfung und mit geeigneten Schutzmaßnahmen aktivieren.
+Direkte Schreibzugriffe sind standardmäßig deaktiviert. Der vollständige Einstellungskatalog enthält auch Service- und Schutzparameter für Pumpen, Ventile, Frostschutz, Zusatzheizungen und Anti-Legionellen-Funktionen. Diese nur mit gerätespezifischer Kenntnis oder fachlicher Unterstützung verändern. Betriebsartenwerte, Bereiche und Bestätigungsregeln stehen unter [Steuerungen](docs/controls.de.md).
 
-## IDs, Instanzen und Wartung
+## Updates, Sicherung und Entfernung
 
 Nutze in Skripten und Visualisierungen State-IDs statt Anzeigebezeichnungen. Die IDs sind im dokumentierten Katalogvergleich stabil; seit `0.12.0` ersetzen beschreibende deutsche Parameter-IDs die älteren `parNN`-Objekt-IDs. Prüfe bei einem Upgrade älterer Versionen Skripte, Aliase, Historien und Dashboards. Siehe [MAPPING.md](MAPPING.md).
 
 Vor Update oder Entfernung ioBroker sichern und die Instanzkonfiguration dokumentieren. Für einen Rollback das vorherige Adapterpaket aufbewahren und nach der Wiederherstellung Verbindung und Telemetrieaktualität prüfen. Das Update von `0.12.3` auf `0.13.1` und die passive Abnahme stehen unter [Validierung](docs/validation.de.md); Steuerungen wurden nicht ausgelöst und ein Rollback wurde nicht getestet. Vor Entfernung einer aktiven Bridge den früheren W600-Netzwerkpfad wiederherstellen, falls das Gerät von diesem Adapter abhing.
+
+## Fehlerhilfe und Support
+
+| Symptom | Prüfen |
+| --- | --- |
+| Keine W600-Verbindung | TCP-Clientziel, erreichbarer LAN-/VPN-Pfad, Listen-Port und Firewall. |
+| Listener startet nicht | Port bereits belegt oder Bind-Adresse am ioBroker-Host nicht vorhanden. |
+| Verbindung, aber keine aktuellen Daten | `meta.last_seen`, `meta.last_setparams` und Empfangs-/Update-Zähler; eine TCP-Verbindung allein belegt keine frische Telemetrie. |
+| Cloud-Weiterleitung nicht verfügbar | Weiterleitungseinstellung, DNS und ausgehender Zugriff auf `www.myheatpump.com:18899`. |
+| Schreibzugriff abgewiesen oder unbestätigt | Schreibfreigabe, `control.directWriteReady`, zulässiger Bereich und frische Rückmeldung; nicht blind wiederholen. |
+
+Weitere Prüf- und Wiederherstellungsschritte: [Betrieb](docs/operations.de.md). Reproduzierbare Fehler mit anonymisierten Diagnosen über [GitHub Issues](https://github.com/Zorax24/ioBroker.heiko/issues) melden.
 
 ## Datenschutz und Diagnosen
 

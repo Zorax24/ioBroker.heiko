@@ -1,4 +1,4 @@
-name: Private Release QA
+name: Release QA
 
 on:
   push:

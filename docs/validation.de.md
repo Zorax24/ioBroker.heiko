@@ -38,7 +38,7 @@ Die simulierte Integration deckte Frame-CRC, Telemetrie und Schreibbestätigung,
 
 ## CI und Releaseprozess
 
-Die private CI-Matrix ist für fünf Jobs definiert: Linux/Node.js 22/js-controller 6.0.11; Linux/Node.js 22, 24 und 26/js-controller 7.2.2; sowie Windows/Node.js 24/js-controller 7.2.2. Die tatsächlichen Ergebnisse je Commit stehen unter [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); eine definierte Matrix ist kein Prüfergebnis. Der Releaseprozess verlangt vor Upload/Tag Build und Tests aus einem frischen Checkout, Paketinhalt-Prüfung, Datenschutzprüfung und erfolgreiche erforderliche CI. Für Downloads ist die SHA-256-Prüfsummendatei des veröffentlichten Archivs maßgeblich.
+Die CI-Matrix umfasst fünf Jobs: Linux/Node.js 22/js-controller 6.0.11; Linux/Node.js 22, 24 und 26/js-controller 7.2.2; sowie Windows/Node.js 24/js-controller 7.2.2. Ergebnisse je Commit stehen unter [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions). Zum Releaseprozess gehören Build und Tests aus einem frischen Checkout, Paketinhalt-Prüfung, Datenschutzprüfung und erfolgreiche erforderliche CI vor der Releaseveröffentlichung. Verwende die SHA-256-Prüfsummendatei des veröffentlichten Archivs zur Downloadprüfung.
 
 ## Validierungsgrenzen
 

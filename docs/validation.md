@@ -37,7 +37,7 @@ The simulated integration coverage includes frame CRC handling, telemetry and wr
 
 ## CI And Release Process
 
-The private CI matrix is defined for five jobs: Linux/Node.js 22/js-controller 6.0.11; Linux/Node.js 22, 24, and 26/js-controller 7.2.2; and Windows/Node.js 24/js-controller 7.2.2. Check the actual per-commit results in [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); a configured matrix is not a pass result. The release process requires a fresh-checkout build/test, package-content verification, privacy review, and successful required CI before upload/tag. The published archive's SHA-256 checksum file is authoritative for download verification.
+The CI matrix covers five jobs: Linux/Node.js 22/js-controller 6.0.11; Linux/Node.js 22, 24, and 26/js-controller 7.2.2; and Windows/Node.js 24/js-controller 7.2.2. Results for each commit are available in [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions). The release process includes a fresh-checkout build/test, package-content verification, privacy review, and successful required CI before release publication. Use the published archive's SHA-256 checksum file to verify your download.
 
 ## Validation Boundaries
 
