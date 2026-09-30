@@ -39,7 +39,6 @@ jobs:
     timeout-minutes: 45
     env:
       HEIKO_TEST_CONTROLLER_VERSION: ${{ matrix.controller }}
-      HEIKO_QA_DIR: ${{ runner.temp }}/heiko-offline-qa
 
     steps:
       - uses: actions/checkout@v7
@@ -87,3 +86,5 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "HEIKO_RELEASE_TARBALL=$archive"
 
       - run: npm run test:integration
+        env:
+          HEIKO_QA_DIR: ${{ runner.temp }}/heiko-offline-qa
