@@ -1,0 +1,255 @@
+{
+    "i18n": true,
+    "type": "panel",
+    "items": {
+        "bridgeEnabled": {
+            "type": "checkbox",
+            "label": "bridgeEnabled",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "listenHost": {
+            "type": "text",
+            "label": "listenHost",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "listenPort": {
+            "type": "number",
+            "label": "listenPort",
+            "newLine": true,
+            "min": 1,
+            "max": 65535,
+            "step": 1,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "upstreamEnabled": {
+            "type": "checkbox",
+            "label": "upstreamEnabled",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "upstreamHost": {
+            "type": "text",
+            "label": "upstreamHost",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "upstreamPort": {
+            "type": "number",
+            "label": "upstreamPort",
+            "newLine": true,
+            "min": 1,
+            "max": 65535,
+            "step": 1,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "autoAckWithoutUpstream": {
+            "type": "checkbox",
+            "label": "autoAckWithoutUpstream",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "fallbackMnNumber": {
+            "type": "text",
+            "label": "fallbackMnNumber",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "fallbackTarget": {
+            "type": "number",
+            "label": "fallbackTarget",
+            "newLine": true,
+            "min": 0,
+            "max": 255,
+            "step": 1,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "fallbackIdentifier": {
+            "type": "number",
+            "label": "fallbackIdentifier",
+            "newLine": true,
+            "min": 0,
+            "max": 255,
+            "step": 1,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "controlEnabled": {
+            "type": "checkbox",
+            "label": "controlEnabled",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "directWritesEnabled": {
+            "type": "checkbox",
+            "label": "directWritesEnabled",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "allowRawHexControl": {
+            "type": "checkbox",
+            "label": "allowRawHexControl",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "retainRawFrames": {
+            "type": "checkbox",
+            "label": "retainRawFrames",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudControlEnabled": {
+            "type": "checkbox",
+            "label": "cloudControlEnabled",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudWritesEnabled": {
+            "type": "checkbox",
+            "label": "cloudWritesEnabled",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudRegion": {
+            "type": "select",
+            "label": "cloudRegion",
+            "newLine": true,
+            "options": [
+                {
+                    "value": "EU",
+                    "label": "cloudRegionEU"
+                },
+                {
+                    "value": "NA",
+                    "label": "cloudRegionNA"
+                },
+                {
+                    "value": "CN",
+                    "label": "cloudRegionCN"
+                }
+            ],
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudTenant": {
+            "type": "text",
+            "label": "cloudTenant",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudUsername": {
+            "type": "text",
+            "label": "cloudUsername",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudPassword": {
+            "type": "password",
+            "label": "cloudPassword",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudDeviceIdentifier": {
+            "type": "text",
+            "label": "cloudDeviceIdentifier",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "cloudSyncIntervalSec": {
+            "type": "number",
+            "label": "cloudSyncIntervalSec",
+            "newLine": true,
+            "min": 15,
+            "max": 3600,
+            "step": 1,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        }
+    }
+}

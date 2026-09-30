@@ -1,0 +1,177 @@
+{
+    "common": {
+        "name": "heiko",
+        "version": "0.13.0",
+        "news": {
+            "0.13.0": {
+                "en": "Prepare a private distributable release with English and German documentation, translated labels, isolated tests and more robust local bridge processing.",
+                "de": "Private Weitergabe mit deutscher und englischer Dokumentation, übersetzten Bezeichnungen, isolierten Tests und robusterer lokaler Telegrammverarbeitung vorbereitet."
+            },
+            "0.12.3": {
+                "en": "Republish the updated adapter icon as an installable update.",
+                "de": "Adaptersymbol als neues installierbares Update bereitgestellt."
+            },
+            "0.12.2": {
+                "en": "Replace the adapter icon with the new transparent heat-pump and wireless-module artwork.",
+                "de": "Adaptersymbol durch das neue transparente Wärmepumpen- und WLAN-Modul-Motiv ersetzt."
+            },
+            "0.12.1": {
+                "en": "Expose the currently effective flow target and heating-curve status, and clarify the fixed target used without a heating curve.",
+                "de": "Aktuell wirksamen Vorlauf-Sollwert und Heizkurvenstatus anzeigen sowie den festen Sollwert ohne Heizkurve eindeutig bezeichnen."
+            },
+            "0.12.0": {
+                "en": "Replace technical parNNN IDs with descriptive German setting IDs and corrected labels, capitalization and umlauts.",
+                "de": "Technische parNNN-IDs durch klare deutsche Einstellungs-IDs mit korrigierten Bezeichnungen, Groß-/Kleinschreibung und Umlauten ersetzt."
+            },
+            "0.11.1": {
+                "en": "Bundle the generated parameter catalog in the compiled adapter package.",
+                "de": "Generierten Parameterkatalog vollständig im kompilierten Adapterpaket gebündelt."
+            },
+            "0.11.0": {
+                "en": "Add 128 settings-page parameters verified against live CMD02, 125 protected direct writes and cloud-free direct hot-water target control.",
+                "de": "128 mit Live-CMD02 abgeglichene Einstellseiten-Parameter, 125 geschützte Direktschreibwerte und cloudfreie Warmwasser-Sollwertsteuerung hinzugefügt."
+            },
+            "0.10.2": {
+                "en": "Allow integer direct cooling targets through 24 degrees for weather-dependent control while retaining mandatory exact CMD02 readback confirmation.",
+                "de": "Ganzzahlige direkte Kuehl-Sollwerte bis 24 Grad fuer die witterungsgefuehrte Regelung zugelassen; die exakte CMD02-Ruecklesebestaetigung bleibt zwingend."
+            },
+            "0.10.1": {
+                "en": "Report direct mode commands with the public ioBroker mode value while retaining the translated W600 value in the write log.",
+                "de": "Direkte Modusbefehle werden mit dem sichtbaren ioBroker-Moduswert protokolliert; der uebersetzte W600-Wert bleibt im Schreibprotokoll erhalten."
+            },
+            "0.10.0": {
+                "en": "Add cloud-free direct W600 control for operating mode and the heating target with correct mode translation and mandatory CMD02 readback verification.",
+                "de": "Cloudfreie direkte W600-Steuerung fuer Betriebsart und Heiz-Sollwert mit korrekter Modusuebersetzung und zwingender CMD02-Ruecklesebestaetigung hinzugefuegt."
+            },
+            "0.9.0": {
+                "en": "Add cloud-free direct W600 control for power and the cooling target using live-confirmed CMD05 parameter writes with mandatory CMD02 readback verification.",
+                "de": "Cloudfreie direkte W600-Steuerung fuer Ein/Aus und Kuehl-Sollwert mit live bestaetigten CMD05-Parameterschreibbefehlen und zwingender CMD02-Ruecklesebestaetigung hinzugefuegt."
+            },
+            "0.8.1": {
+                "en": "Normalize quality metadata of initialized cloud-control readiness states so disabled controls are reported as valid false/null values instead of q=32 placeholders.",
+                "de": "Qualitaetsmetadaten der initialisierten Cloud-Steuerstates korrigiert, damit deaktivierte Steuerung als gueltige false/null-Werte statt als q=32-Platzhalter erscheint."
+            },
+            "0.8.0": {
+                "en": "Harden confirmed MyHeatPump controls with automatic W600 MAC device selection, an explicit write-ready state, product-specific mode and setpoint metadata, stale-value cleanup and persistent valid CMD05 capture history.",
+                "de": "Bestaetigte MyHeatPump-Steuerung mit automatischer W600-MAC-Geraeteauswahl, eindeutigem Schreibbereit-Status, produktspezifischen Modus- und Sollwertgrenzen, Bereinigung veralteter Werte und persistenter Historie gueltiger CMD05-Mitschnitte abgesichert."
+            },
+            "0.7.1": {
+                "en": "Write final bridge states in parallel during shutdown so updates and restarts complete within the ioBroker stop timeout.",
+                "de": "Letzte Bruecken-States werden beim Beenden parallel geschrieben, damit Updates und Neustarts innerhalb des ioBroker-Abschaltfensters abgeschlossen werden."
+            },
+            "0.7.0": {
+                "en": "Add realtime fields confirmed against the official MyHeatPump display: P0 PWM, mixer outputs, flow switch, defrost, fan 1/2, pump P0/P1/P2, calculated compressor speed, suction/discharge superheat and AH/HBH/HWTBH runtimes.",
+                "de": "Mit der offiziellen MyHeatPump-Anzeige bestaetigte Echtzeitwerte hinzugefuegt: P0-PWM, Mischerausgaenge, Stroemungswaechter, Abtauung, Luefter 1/2, Pumpen P0/P1/P2, berechnete Verdichterstufe, Saug-/Druckgasueberhitzung und AH/HBH/HWTBH-Laufzeiten."
+            },
+            "0.6.2": {
+                "en": "Wait for final bridge state updates during adapter shutdown to prevent unhandled DB-closed promise rejections on restart or update.",
+                "de": "Beim Beenden werden die letzten Bruecken-State-Updates abgewartet, damit bei Neustart oder Update keine unbehandelten DB-closed-Promise-Fehler mehr auftreten."
+            },
+            "0.6.1": {
+                "en": "Remove orphaned state values together with obsolete telemetry objects and move the remaining internal bridge status from sniffer.status to bridge.status.",
+                "de": "Verwaiste State-Werte werden zusammen mit veralteten Telemetrieobjekten entfernt; der verbleibende interne Brueckenstatus wurde von sniffer.status nach bridge.status verschoben."
+            },
+            "0.6.0": {
+                "en": "Rebuild the telemetry tree from live operating traces: expose only confirmed temperatures, pressures, compressor, valve, fan, current, voltage, pump and settings; consolidate unknown raw values and remove the invalid CMD01 prefix fault-register interpretation.",
+                "de": "Telemetriebaum anhand echter Betriebsverlaeufe neu aufgebaut: nur bestaetigte Temperaturen, Druecke, Verdichter-, Ventil-, Luefter-, Strom-, Spannungs-, Pumpen- und Einstellwerte, unbekannte Rohwerte zusammengefasst und die falsche Fehlerregister-Deutung des CMD01-Praefixes entfernt."
+            },
+            "0.5.2": {
+                "en": "Add a protected one-shot command that validates and republishes the latest genuine CMD01 realtime and CMD02 settings frames through the active transparent MyHeatPump connection.",
+                "de": "Geschuetzten Einmal-Befehl hinzugefuegt, der die letzten echten CMD01-Echtzeit- und CMD02-Einstellungsframes validiert und ueber die aktive transparente MyHeatPump-Verbindung erneut sendet."
+            },
+            "0.5.1": {
+                "en": "Correct the documented MyHeatPump device upstream to www.myheatpump.com:18899, transparently decode both wire directions, add forwarding counters and reconnect the upstream automatically.",
+                "de": "Dokumentierten MyHeatPump-Geraete-Upstream auf www.myheatpump.com:18899 korrigiert, beide Uebertragungsrichtungen transparent dekodiert, Weiterleitungszaehler hinzugefuegt und automatische Upstream-Wiederverbindung umgesetzt."
+            }
+        },
+        "titleLang": {
+            "en": "Heiko Heat Pump",
+            "de": "Heiko Wärmepumpe",
+            "ru": "Heiko Heat Pump",
+            "pt": "Heiko Heat Pump",
+            "nl": "Heiko Heat Pump",
+            "fr": "Heiko Heat Pump",
+            "it": "Heiko Heat Pump",
+            "es": "Heiko Heat Pump",
+            "pl": "Heiko Heat Pump",
+            "uk": "Heiko Heat Pump",
+            "zh-cn": "Heiko Heat Pump"
+        },
+        "desc": {
+            "en": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps, writes decoded telemetry into ioBroker and provides confirmed direct control.",
+            "de": "Betreibt eine W600-TCP-Bridge fuer Heiko/Sprsun/Neoheat-Waermepumpen, schreibt dekodierte Telemetrie nach ioBroker und stellt bestaetigte Direktsteuerung bereit.",
+            "ru": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "pt": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "nl": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "fr": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "it": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "es": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "pl": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "uk": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "zh-cn": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker."
+        },
+        "authors": ["Zorax24"],
+        "keywords": ["heiko", "sprsun", "neoheat", "heat-pump", "w600", "tcp", "bridge"],
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
+        "platform": "Javascript/Node.js",
+        "icon": "heiko.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/Zorax24/ioBroker.heiko/main/admin/heiko.png",
+        "readme": "https://github.com/Zorax24/ioBroker.heiko/blob/main/README.md",
+        "loglevel": "info",
+        "tier": 3,
+        "mode": "daemon",
+        "type": "climate-control",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "push",
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=6.0.11"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=7.6.20"
+            }
+        ]
+    },
+    "protectedNative": [
+        "cloudPassword"
+    ],
+    "encryptedNative": [
+        "cloudPassword"
+    ],
+    "native": {
+        "bridgeEnabled": true,
+        "listenHost": "0.0.0.0",
+        "listenPort": 8899,
+        "upstreamEnabled": true,
+        "upstreamHost": "www.myheatpump.com",
+        "upstreamPort": 18899,
+        "autoAckWithoutUpstream": false,
+        "fallbackMnNumber": "",
+        "fallbackTarget": 0,
+        "fallbackIdentifier": 0,
+        "controlEnabled": true,
+        "directWritesEnabled": false,
+        "allowRawHexControl": false,
+        "retainRawFrames": true,
+        "cloudControlEnabled": false,
+        "cloudWritesEnabled": false,
+        "cloudRegion": "EU",
+        "cloudTenant": "euheatpump",
+        "cloudUsername": "",
+        "cloudPassword": "",
+        "cloudDeviceIdentifier": "",
+        "cloudSyncIntervalSec": 60
+    },
+    "objects": [],
+    "instanceObjects": []
+}
