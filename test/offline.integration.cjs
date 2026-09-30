@@ -10,6 +10,7 @@ const path = require('node:path');
 const { tests, IntegrationTestHarness } = require('@iobroker/testing');
 const { AdapterSetup } = require('@iobroker/testing/build/tests/integration/lib/adapterSetup');
 const { executeCommand } = require('@iobroker/testing/build/lib/executeCommand');
+const { PARAMETER_DEFINITIONS, PARAMETER_SECTIONS } = require('../build/lib/parameter-catalog.js');
 const {
     FrameReader,
     TEST_MN_A,
@@ -461,6 +462,32 @@ tests.integration(adapterRoot, {
                 assert.equal(tuo.native.floatIndex, 3);
                 assert.equal(objectCommon(directCatalogBoolean).type, 'boolean');
                 assert.equal(objectCommon(catalogNumber).type, 'number');
+
+                for (const definition of PARAMETER_DEFINITIONS) {
+                    const object = await harness.objects.getObjectAsync(fullId(definition.stateId));
+                    assert.deepEqual(
+                        objectCommon(object).name,
+                        {
+                            en: definition.nameEn,
+                            de: definition.name,
+                        },
+                        `${definition.stateId}: language-selectable display name`,
+                    );
+                    assert.deepEqual(
+                        objectCommon(object).desc,
+                        {
+                            en: definition.descriptionEn,
+                            de: definition.description,
+                        },
+                        `${definition.stateId}: language-selectable description`,
+                    );
+                }
+                for (const section of PARAMETER_SECTIONS) {
+                    const object = await harness.objects.getObjectAsync(fullId(`Einstellungen.${section.id}`));
+                    assert.deepEqual(objectCommon(object).name, { en: section.nameEn, de: section.name });
+                }
+                assert.equal(objectCommon(power).name.en, 'Heat pump on/off');
+                assert.equal(objectCommon(tuo).name.en, 'Flow water temperature Tuo');
 
                 const ioPackage = JSON.parse(
                     fs.readFileSync(path.join(harness.testAdapterDir, 'io-package.json'), 'utf8'),

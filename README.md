@@ -108,6 +108,12 @@ Direct writes are disabled by default. The full settings catalog also contains s
 
 Use state IDs rather than display labels in scripts and visualizations. IDs are stable across the documented catalog comparison; since `0.12.0`, descriptive German parameter IDs replaced older `parNN` object IDs. Check legacy scripts, aliases, history, and dashboards when upgrading from an older version. See [MAPPING.md](MAPPING.md).
 
+### Display language
+
+State names, descriptions, and parameter groups are available in English and German. Select English as your ioBroker Admin language to see English display names, such as **Cooling setpoint**, **Compressor frequency**, and **Flow temperature setpoint without heating curve**. Selection labels include both languages where applicable.
+
+Technical object IDs are not translated. For example, `Einstellungen.HeizKühlkreis1.KühlSolltemperatur` displays as **Cooling setpoint** in English, but its ID stays unchanged so scripts, aliases, history, and dashboards keep working. Use the display-name column in Admin when browsing the objects.
+
 Before update or removal, back up ioBroker and record the instance configuration. For rollback, retain the previous adapter package and verify connection and telemetry freshness after restoring it. The `0.12.3` to `0.13.1` update and passive acceptance are recorded in [validation](docs/validation.md); no controls were actuated and rollback was not tested. Before removing an active bridge, restore the W600's previous network route if it depended on this adapter.
 
 ## Troubleshooting And Support

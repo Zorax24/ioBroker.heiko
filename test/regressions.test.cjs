@@ -6,6 +6,9 @@ const path = require('node:path');
 const { MyHeatPumpCloudClient, MyHeatPumpCloudError } = require('../build/lib/cloud.js');
 const { normalizeDirectCoolingTarget } = require('../build/lib/control.js');
 const { PARAMETER_BY_STATE_ID, normalizeConfirmedParameterValue } = require('../build/lib/parameter-catalog.js');
+const { PARAMETER_DEFINITIONS, PARAMETER_SECTIONS } = require('../build/lib/parameter-catalog.js');
+const { OBJECT_LOCALIZATION } = require('../build/lib/object-localization.js');
+const { REALTIME_FIELDS, SETTINGS_FIELDS } = require('../build/lib/definition.js');
 const {
     corruptCrc,
     makeCommandFrame,
@@ -15,6 +18,28 @@ const {
 } = require('./helpers/offline-w600.cjs');
 
 describe('offline regressions', () => {
+    it('provides English and German labels for the complete parameter and telemetry catalog', () => {
+        assert.equal(PARAMETER_DEFINITIONS.length, 128);
+        for (const field of [...PARAMETER_DEFINITIONS, ...REALTIME_FIELDS, ...SETTINGS_FIELDS]) {
+            assert.ok(field.name?.trim(), `${field.stateId || field.rawId}: German name`);
+            assert.ok(field.nameEn?.trim(), `${field.stateId || field.rawId}: English name`);
+            assert.ok(field.description?.trim(), `${field.stateId || field.rawId}: German description`);
+            assert.ok(field.descriptionEn?.trim(), `${field.stateId || field.rawId}: English description`);
+        }
+        for (const section of PARAMETER_SECTIONS) {
+            assert.ok(section.name.trim(), `${section.id}: German channel name`);
+            assert.ok(section.nameEn.trim(), `${section.id}: English channel name`);
+        }
+        for (const [id, text] of Object.entries(OBJECT_LOCALIZATION)) {
+            assert.ok(text.name.en.trim(), `${id}: English name`);
+            assert.ok(text.name.de.trim(), `${id}: German name`);
+            if (text.desc) {
+                assert.ok(text.desc.en.trim(), `${id}: English description`);
+                assert.ok(text.desc.de.trim(), `${id}: German description`);
+            }
+        }
+    });
+
     it('uses neutral frames with independently fixed CRC bytes', () => {
         const request = makeCommandFrame({ command: 0x06 });
         assert.equal(request.toString('hex'), '55aa01020000000001010100064e2c3a');

@@ -108,6 +108,12 @@ Direkte Schreibzugriffe sind standardmäßig deaktiviert. Der vollständige Eins
 
 Nutze in Skripten und Visualisierungen State-IDs statt Anzeigebezeichnungen. Die IDs sind im dokumentierten Katalogvergleich stabil; seit `0.12.0` ersetzen beschreibende deutsche Parameter-IDs die älteren `parNN`-Objekt-IDs. Prüfe bei einem Upgrade älterer Versionen Skripte, Aliase, Historien und Dashboards. Siehe [MAPPING.md](MAPPING.md).
 
+### Anzeigesprache
+
+Namen, Beschreibungen und Parametergruppen sind auf Deutsch und Englisch hinterlegt. Mit Englisch als Sprache im ioBroker Admin erscheinen englische Anzeigenamen, etwa **Cooling setpoint**, **Compressor frequency** und **Flow temperature setpoint without heating curve**. Auswahltexte enthalten, wo zutreffend, beide Sprachen.
+
+Technische Objekt-IDs werden nicht übersetzt. Beispielsweise erscheint `Einstellungen.HeizKühlkreis1.KühlSolltemperatur` auf Englisch als **Cooling setpoint**, behält aber seine ID, damit Skripte, Aliase, Historien und Dashboards weiter funktionieren. Nutze beim Durchsehen der Objekte die Anzeigenamen-Spalte im Admin.
+
 Vor Update oder Entfernung ioBroker sichern und die Instanzkonfiguration dokumentieren. Für einen Rollback das vorherige Adapterpaket aufbewahren und nach der Wiederherstellung Verbindung und Telemetrieaktualität prüfen. Das Update von `0.12.3` auf `0.13.1` und die passive Abnahme stehen unter [Validierung](docs/validation.de.md); Steuerungen wurden nicht ausgelöst und ein Rollback wurde nicht getestet. Vor Entfernung einer aktiven Bridge den früheren W600-Netzwerkpfad wiederherstellen, falls das Gerät von diesem Adapter abhing.
 
 ## Fehlerhilfe und Support
