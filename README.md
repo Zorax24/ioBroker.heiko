@@ -2,35 +2,39 @@
 
 # ioBroker.heiko
 
-**Version: `0.13.0`**
+**Version: `0.13.1`**
 
-Private ioBroker adapter for the W600 TCP format reported for a historical HEIKO THERMAL 12 installation. The controller/W600 firmware is not established, and compatibility with other models, firmware, or optional sensors is not verified. This repository contains an ioBroker adapter only; it does not provide a Home Assistant integration.
+ioBroker adapter for HEIKO heat pumps connected through a W600 TCP interface. This repository contains an ioBroker adapter only; it does not provide a Home Assistant integration.
 
 This project was developed with AI assistance using a vibe-coding approach. See this documentation for completed tests, supported hardware, and known limitations.
 
 The adapter accepts the W600's inbound TCP connection, can transparently forward its byte stream to the MyHeatPump device server, and decodes mapped telemetry into ioBroker states. Optional direct W600 controls and a separate MyHeatPump cloud API client are available. See [MAPPING.md](MAPPING.md) for protocol and state mappings.
+
+## Compatibility
+
+Validated against the reported HEIKO THERMAL 12 installation using a W600. The exact controller/W600 firmware is unknown; compatibility with other models, firmware, or optional sensors is not claimed.
 
 ## Quick Start
 
 ### Requirements
 
 - Declared package floor: Node.js `>=20`; ioBroker metadata requires js-controller `>=6.0.11` and Admin `>=7.6.20`.
-- ioBroker currently recommends Node.js 24 and npm 11. The completed local QA used Node.js `24.15.0`, npm `11.12.1`, and js-controller `7.2.2`; see [validation](docs/validation.md) for what was and was not tested.
+- ioBroker currently recommends Node.js 24 and npm 11; see [validation](docs/validation.md) for this release's test scope and limits.
 - A controller/W600 that uses the documented frame format and a network path from the W600 to the ioBroker host. Sensor names identify protocol fields; they do not guarantee that every sensor is fitted or reported.
 - If transparent forwarding is enabled, outbound TCP access from the ioBroker host to `www.myheatpump.com:18899`.
 
 ### Private release installation
 
-Authorized GitHub users can download `iobroker.heiko-0.13.0.tgz` from the private [`v0.13.0` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.0). Save it as a local file in the ioBroker controller project directory. Do not use an unauthenticated download URL or put tokens or account credentials in commands or diagnostics.
+This repository is private. Authorized GitHub users can download `iobroker.heiko-0.13.1.tgz` from the private [`v0.13.1` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1). Save it as a local file in the ioBroker controller project directory. Do not use an unauthenticated download URL or put tokens or account credentials in commands or diagnostics.
 
 The tested local package route, from that controller directory, is:
 
 ```sh
-npm install --omit=dev ./iobroker.heiko-0.13.0.tgz
+npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
 iobroker add heiko --enabled false
 ```
 
-The local `.tgz` route was verified with `--offline`; the command above lets npm resolve uncached dependencies through its configured registry if needed. Networked dependency resolution was not separately exercised. The instance is created disabled; review its native configuration before starting it. The full local QA result and its scope are summarized in [validation](docs/validation.md). The private CI workflow's per-commit results are shown in [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); the matrix definition is not evidence that every job has passed.
+The local tarball was installed and smoke-checked in a Debian 13 development ioBroker instance. The instance is created disabled; review its native configuration before starting it. See [validation](docs/validation.md) for the live passive acceptance and its boundaries. The private CI workflow's per-commit results are shown in [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); the matrix definition is not evidence that every job has passed.
 
 ### First configuration
 
@@ -58,7 +62,7 @@ W600 TCP client -> ioBroker.heiko listener -> MyHeatPump device server
                          +-> passive frame decoding into ioBroker states
 ```
 
-When `upstreamEnabled` is true, byte chunks are forwarded unchanged in both directions while a passive copy is decoded for ioBroker. This includes manufacturer-originated CMD05 frames: `directWritesEnabled` and `cloudWritesEnabled` govern only writes initiated by the adapter; they do not filter forwarded traffic and are not firewall controls. `autoAckWithoutUpstream` defaults to false. If explicitly enabled, valid CMD01/CMD02 frames are acknowledged locally while the upstream is unavailable, whether forwarding is deliberately disabled or the connection is down. Local ACKs are not a cloud/app emulator. The behavior was exercised by the local integration suite with simulated endpoints; it has not been validated against a live service or heat pump.
+When `upstreamEnabled` is true, byte chunks are forwarded unchanged in both directions while a passive copy is decoded for ioBroker. This includes manufacturer-originated CMD05 frames: `directWritesEnabled` and `cloudWritesEnabled` govern only writes initiated by the adapter; they do not filter forwarded traffic and are not firewall controls. `autoAckWithoutUpstream` defaults to false. If explicitly enabled, valid CMD01/CMD02 frames are acknowledged locally while the upstream is unavailable, whether forwarding is deliberately disabled or the connection is down. Local ACKs are not a cloud/app emulator. Simulated integration tests exercised forwarding recovery and local ACK behavior; the live acceptance separately confirmed passive readout and bidirectional forwarding. Auto-ACK fallback and physical control were not tested live.
 
 Use one adapter bridge instance per heat pump. Each bridge instance needs a unique listen port. Telemetry from multiple W600 clients shares the instance's ioBroker object namespace; direct writes require exactly one active W600 session and are rejected when the session is ambiguous. After reconnect, the first valid unit frame refreshes direct-write readiness for the new session.
 
@@ -79,11 +83,19 @@ Direct controls and expert parameter writes are disabled by default. The support
 
 Use state IDs rather than display labels in scripts and visualizations. IDs are stable across the documented catalog comparison; since `0.12.0`, descriptive German parameter IDs replaced older `parNN` object IDs. Check legacy scripts, aliases, history, and dashboards when upgrading from an older version. See [MAPPING.md](MAPPING.md).
 
-Before update or removal, back up ioBroker and record the instance configuration. For rollback, retain the previous adapter package and verify connection and telemetry freshness after restoring it. Upgrade from the installed `0.12.3` package and rollback were not part of this QA run. Before removing an active bridge, restore the W600's previous network route if it depended on this adapter. More detail: [operations](docs/operations.md).
+Before update or removal, back up ioBroker and record the instance configuration. For rollback, retain the previous adapter package and verify connection and telemetry freshness after restoring it. The `0.12.3` to `0.13.1` update and passive acceptance are recorded in [validation](docs/validation.md); no controls were actuated and rollback was not tested. Before removing an active bridge, restore the W600's previous network route if it depended on this adapter.
 
 ## Privacy And Diagnostics
 
 Raw frames are retained by default. `retainRawFrames=false` suppresses raw frame/diagnostic payloads and write-log raw fields and clears retained frame/CMD05 history. It does not erase structured telemetry or operator-supplied `command.rawHex` and its result. Treat states and logs as sensitive; sanitize device identifiers, host details, raw data, and household telemetry before sharing.
+
+## Documentation
+
+- [Installation, operations, backup, and rollback](docs/operations.md)
+- [Controls and state semantics](docs/controls.md)
+- [Protocol and state mapping](MAPPING.md)
+- [Validation scope and evidence](docs/validation.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
 
 ## License
 

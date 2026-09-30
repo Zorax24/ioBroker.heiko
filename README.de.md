@@ -2,35 +2,39 @@
 
 # ioBroker.heiko
 
-**Version: `0.13.0`**
+**Version: `0.13.1`**
 
-Privater ioBroker-Adapter für das W600-TCP-Format, das für eine historische HEIKO-THERMAL-12-Installation gemeldet wurde. Die Regler-/W600-Firmware ist nicht bekannt; die Kompatibilität mit anderen Modellen, Firmwareständen oder optionalen Sensoren ist nicht verifiziert. Dieses Repository enthält ausschließlich einen ioBroker-Adapter und keine Home-Assistant-Integration.
+ioBroker-Adapter für HEIKO-Wärmepumpen mit W600-TCP-Schnittstelle. Dieses Repository enthält ausschließlich einen ioBroker-Adapter und keine Home-Assistant-Integration.
 
 Dieses Projekt wurde mit KI-Unterstützung nach einem Vibe-Coding-Ansatz entwickelt. Diese Dokumentation informiert über abgeschlossene Tests, unterstützte Hardware und bekannte Einschränkungen.
 
 Der Adapter nimmt die eingehende TCP-Verbindung des W600 an, kann deren Datenstrom transparent zum MyHeatPump-Geräteserver weiterleiten und zugeordnete Telemetrie als ioBroker-States dekodieren. Optionale direkte W600-Steuerung und ein separater MyHeatPump-Cloud-API-Client sind verfügbar. Protokoll- und State-Zuordnungen stehen in [MAPPING.md](MAPPING.md).
+
+## Kompatibilität
+
+Validiert wurde die gemeldete HEIKO-THERMAL-12-Installation mit W600. Die genaue Regler-/W600-Firmware ist unbekannt; Kompatibilität mit anderen Modellen, Firmwareständen oder optionalen Sensoren wird nicht behauptet.
 
 ## Schnellstart
 
 ### Voraussetzungen
 
 - Deklarierte Paketuntergrenze: Node.js `>=20`; die ioBroker-Metadaten verlangen js-controller `>=6.0.11` und Admin `>=7.6.20`.
-- ioBroker empfiehlt derzeit Node.js 24 und npm 11. Die abgeschlossene lokale QA nutzte Node.js `24.15.0`, npm `11.12.1` und js-controller `7.2.2`; in der [Validierung](docs/validation.de.md) steht, was geprüft wurde und was nicht.
+- ioBroker empfiehlt derzeit Node.js 24 und npm 11; der [Validierungsbericht](docs/validation.de.md) beschreibt Prüfumfang und Grenzen dieses Releases.
 - Ein Regler/W600 mit dem dokumentierten Frame-Format und ein Netzwerkpfad vom W600 zum ioBroker-Host. Sensornamen bezeichnen Protokollfelder und garantieren nicht, dass jeder Sensor eingebaut ist oder Werte liefert.
 - Bei aktivierter transparenter Weiterleitung benötigt der ioBroker-Host ausgehenden TCP-Zugriff auf `www.myheatpump.com:18899`.
 
 ### Installation aus dem privaten Release
 
-Berechtigte GitHub-Nutzer laden `iobroker.heiko-0.13.0.tgz` über die private [Release-Seite `v0.13.0`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.0) herunter. Als lokale Datei im ioBroker-Controller-Projektverzeichnis ablegen. Keine unauthentifizierte Download-URL und keine Tokens oder Kontodaten in Befehlen oder Diagnoseberichten verwenden.
+Dieses Repository ist privat. Berechtigte GitHub-Nutzer laden `iobroker.heiko-0.13.1.tgz` über die private [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) herunter. Als lokale Datei im ioBroker-Controller-Projektverzeichnis ablegen. Keine unauthentifizierte Download-URL und keine Tokens oder Kontodaten in Befehlen oder Diagnoseberichten verwenden.
 
 Der geprüfte lokale Paketweg wird aus diesem Controller-Verzeichnis ausgeführt:
 
 ```sh
-npm install --omit=dev ./iobroker.heiko-0.13.0.tgz
+npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
 iobroker add heiko --enabled false
 ```
 
-Der lokale `.tgz`-Weg wurde mit `--offline` geprüft; der obige Befehl erlaubt npm, nicht zwischengespeicherte Abhängigkeiten bei Bedarf über die konfigurierte Registry zu beziehen. Diese Netzwerkvariante wurde nicht separat geprüft. Die Instanz wird deaktiviert angelegt; prüfe ihre native Konfiguration vor dem Start. Das vollständige lokale QA-Ergebnis und dessen Umfang stehen unter [Validierung](docs/validation.de.md). Die tatsächlichen Ergebnisse je Commit zeigt der private CI-Workflow unter [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); die Definition der Matrix belegt nicht, dass alle Jobs bestanden sind.
+Der lokale Tarball wurde in einer Debian-13-Entwicklungsinstanz für ioBroker installiert und einem Smoke-Test unterzogen. Die Instanz wird deaktiviert angelegt; prüfe ihre native Konfiguration vor dem Start. Die [Validierung](docs/validation.de.md) beschreibt die passive Live-Abnahme und ihre Grenzen. Die tatsächlichen Ergebnisse je Commit zeigt der private CI-Workflow unter [GitHub Actions](https://github.com/Zorax24/ioBroker.heiko/actions); die Definition der Matrix belegt nicht, dass alle Jobs bestanden sind.
 
 ### Erstkonfiguration
 
@@ -58,7 +62,7 @@ W600-TCP-Client -> ioBroker.heiko-Listener -> MyHeatPump-Geräteserver
                          +-> passive Frame-Dekodierung in ioBroker-States
 ```
 
-Bei `upstreamEnabled=true` werden Datenblöcke in beide Richtungen unverändert weitergeleitet; eine passive Kopie wird für ioBroker dekodiert. Das schließt herstellerseitige CMD05-Frames ein: `directWritesEnabled` und `cloudWritesEnabled` steuern nur vom Adapter initiierte Schreibzugriffe. Sie filtern keine weitergeleiteten Daten und sind keine Firewall-Regeln. `autoAckWithoutUpstream` ist standardmäßig false. Bei ausdrücklicher Aktivierung bestätigt der Adapter gültige CMD01-/CMD02-Frames lokal, solange der Upstream nicht verfügbar ist, sowohl bei absichtlich deaktivierter Weiterleitung als auch bei Verbindungsabbruch. Lokale ACKs emulieren weder Cloud noch App. Dieses Verhalten wurde in der lokalen Integrationssuite mit simulierten Endpunkten geprüft, nicht mit einem Live-Dienst oder einer Wärmepumpe.
+Bei `upstreamEnabled=true` werden Datenblöcke in beide Richtungen unverändert weitergeleitet; eine passive Kopie wird für ioBroker dekodiert. Das schließt herstellerseitige CMD05-Frames ein: `directWritesEnabled` und `cloudWritesEnabled` steuern nur vom Adapter initiierte Schreibzugriffe. Sie filtern keine weitergeleiteten Daten und sind keine Firewall-Regeln. `autoAckWithoutUpstream` ist standardmäßig false. Bei ausdrücklicher Aktivierung bestätigt der Adapter gültige CMD01-/CMD02-Frames lokal, solange der Upstream nicht verfügbar ist, sowohl bei absichtlich deaktivierter Weiterleitung als auch bei Verbindungsabbruch. Lokale ACKs emulieren weder Cloud noch App. Die simulierte Integrationssuite prüfte Weiterleitungs-Wiederherstellung und lokales ACK-Verhalten; die passive Live-Abnahme bestätigte separat Auslesung und Weiterleitung in beide Richtungen. Auto-ACK-Fallback und physische Steuerung wurden live nicht geprüft.
 
 Verwende eine Bridge-Instanz pro Wärmepumpe. Jede Bridge-Instanz benötigt einen eindeutigen Listen-Port. Telemetrie mehrerer W600-Clients teilt sich den ioBroker-Objektnamensraum der Instanz; direkte Schreibzugriffe benötigen genau eine aktive W600-Sitzung und werden bei Mehrdeutigkeit abgewiesen. Nach einer Wiederverbindung aktualisiert der erste gültige Geräte-Frame die Direkt-Schreibbereitschaft für die neue Sitzung.
 
@@ -79,11 +83,19 @@ Direkte Steuerungen und Expertenparameter sind standardmäßig deaktiviert. Best
 
 Nutze in Skripten und Visualisierungen State-IDs statt Anzeigebezeichnungen. Die IDs sind im dokumentierten Katalogvergleich stabil; seit `0.12.0` ersetzen beschreibende deutsche Parameter-IDs die älteren `parNN`-Objekt-IDs. Prüfe bei einem Upgrade älterer Versionen Skripte, Aliase, Historien und Dashboards. Siehe [MAPPING.md](MAPPING.md).
 
-Vor Update oder Entfernung ioBroker sichern und die Instanzkonfiguration dokumentieren. Für einen Rollback das vorherige Adapterpaket aufbewahren und nach der Wiederherstellung Verbindung und Telemetrieaktualität prüfen. Ein Upgrade vom installierten Paket `0.12.3` und ein Rollback waren nicht Teil dieses QA-Laufs. Vor Entfernung einer aktiven Bridge den früheren W600-Netzwerkpfad wiederherstellen, falls das Gerät von diesem Adapter abhing. Weitere Hinweise: [Betrieb](docs/operations.de.md).
+Vor Update oder Entfernung ioBroker sichern und die Instanzkonfiguration dokumentieren. Für einen Rollback das vorherige Adapterpaket aufbewahren und nach der Wiederherstellung Verbindung und Telemetrieaktualität prüfen. Das Update von `0.12.3` auf `0.13.1` und die passive Abnahme stehen unter [Validierung](docs/validation.de.md); Steuerungen wurden nicht ausgelöst und ein Rollback wurde nicht getestet. Vor Entfernung einer aktiven Bridge den früheren W600-Netzwerkpfad wiederherstellen, falls das Gerät von diesem Adapter abhing.
 
 ## Datenschutz und Diagnosen
 
 Rohframes werden standardmäßig aufbewahrt. `retainRawFrames=false` unterdrückt rohe Frame-/Diagnose-Payloads und Rohfelder in Schreibprotokollen und leert gespeicherte Frame-/CMD05-Historie. Strukturierte Telemetrie sowie vom Bediener eingegebenes `command.rawHex` und dessen Ergebnis werden dadurch nicht gelöscht. States und Logs vertraulich behandeln; Gerätekennungen, Hostdetails, Rohdaten und haushaltsbezogene Telemetrie vor dem Teilen anonymisieren.
+
+## Dokumentation
+
+- [Installation, Betrieb, Sicherung und Rollback](docs/operations.de.md)
+- [Steuerungen und State-Semantik](docs/controls.de.md)
+- [Protokoll- und State-Zuordnung](MAPPING.md)
+- [Validierungsumfang und Belege](docs/validation.de.md)
+- [Drittanbieterhinweise](THIRD_PARTY_NOTICES.md)
 
 ## Lizenz
 

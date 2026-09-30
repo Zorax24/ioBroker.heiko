@@ -2,20 +2,20 @@
 
 [English](operations.md) | [Deutsch](operations.de.md)
 
-This guide covers installing and operating the private ioBroker adapter. Authorized GitHub users download the package from the private [`v0.13.0` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.0).
+This guide covers installing and operating the ioBroker adapter.
 
 ## Install The Local Release Package
 
-Sign in to GitHub, open the release page when the release is available, and download `iobroker.heiko-0.13.0.tgz` to a local file. Do not place tokens or account credentials in commands, adapter settings, or support reports.
+This repository is private. Sign in to GitHub, open the [`v0.13.1` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1), and download `iobroker.heiko-0.13.1.tgz` to a retained local file. Do not place tokens or account credentials in commands, adapter settings, or support reports. Keep the archive at its installed location: npm records a local-file dependency and may need it again during package maintenance.
 
 The tested local package route uses the ioBroker controller project directory and the package file in that directory:
 
 ```sh
-npm install --omit=dev ./iobroker.heiko-0.13.0.tgz
+npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
 iobroker add heiko --enabled false
 ```
 
-The route was verified with `--offline`; the command above lets npm resolve uncached dependencies from its configured registry if needed, though that networked dependency fetch was not separately tested. The instance is added disabled. Before starting it, set and review the native listener configuration using the host's established ioBroker configuration procedure. The local QA used a loopback-only listener before start, then installed, started, and stopped the packed adapter. It did not test an Admin UI package-install workflow. See [validation](validation.md) for full environment and limits.
+The local tarball was installed and smoke-checked in a Debian 13 development ioBroker instance. A separate `0.12.3` to `0.13.1` update passed the documented live passive connection/readout checks; this did not actuate controls or test the live cloud API. The instance is added disabled. Before starting it, set and review the native listener configuration using the host's established ioBroker configuration procedure. The Admin UI package-install workflow was not part of the documented checks. See [validation](validation.md) for the evidence scope and limits.
 
 ## Configure The W600 Bridge
 
@@ -40,9 +40,9 @@ Before updating:
 3. When upgrading from before `0.12.0`, check scripts, aliases, history, and dashboards for legacy `parNN`/`parameters.*` IDs; the catalog uses descriptive `Einstellungen.*` IDs.
 4. Install the authenticated release package and review the instance configuration before enabling it.
 
-After an update, verify instance health, listener state, W600 connectivity, telemetry freshness, and upstream state separately. Review dependent scripts and controls before resuming automations.
+Activating an update restarts the adapter and briefly interrupts W600/upstream connections. Schedule that interruption; do not restart the entire ioBroker controller. A mapping-schema update may clear old telemetry until the next valid frames arrive. After an update, verify instance health, listener state, W600 connectivity, telemetry freshness, and upstream state separately. Review dependent scripts and controls before resuming automations.
 
-For rollback, reinstall the retained adapter package using a tested local package procedure, restore the instance configuration if needed, restart, and check the same states. Upgrade from `0.12.3` and rollback were not exercised in this QA run; see [validation](validation.md).
+For rollback, reinstall the retained adapter package using a local package procedure, restore the instance configuration if needed, restart, and check the same states. A rollback from `0.13.1` was not tested; see [validation](validation.md).
 
 Before removal, restore the W600/network path that preceded the local bridge if the heat pump depends on this adapter for its MyHeatPump connection. Then stop/disable the instance and check dependent scripts and object consumers before removing it. Removing a bridge that is still in the active path can interrupt telemetry and app access.
 

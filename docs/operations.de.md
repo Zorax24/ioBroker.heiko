@@ -2,20 +2,20 @@
 
 [English](operations.md) | [Deutsch](operations.de.md)
 
-Diese Anleitung behandelt Installation und Betrieb des privaten ioBroker-Adapters. Berechtigte GitHub-Nutzer laden das Paket über die private [Release-Seite `v0.13.0`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.0) herunter.
+Diese Anleitung behandelt Installation und Betrieb des ioBroker-Adapters.
 
 ## Lokales Releasepaket installieren
 
-Melde dich bei GitHub an, öffne die Release-Seite, sobald das Release verfügbar ist, und lade `iobroker.heiko-0.13.0.tgz` als lokale Datei herunter. Tokens oder Zugangsdaten gehören nicht in Befehle, Adaptereinstellungen oder Supportberichte.
+Dieses Repository ist privat. Melde dich bei GitHub an, öffne die [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) und lade `iobroker.heiko-0.13.1.tgz` als dauerhaft aufbewahrte lokale Datei herunter. Tokens oder Zugangsdaten gehören nicht in Befehle, Adaptereinstellungen oder Supportberichte. Behalte das Archiv am Installationsort: npm vermerkt eine lokale Dateiabhängigkeit und kann das Paket bei späterer Paketpflege erneut benötigen.
 
 Der geprüfte lokale Paketweg verwendet das ioBroker-Controller-Projektverzeichnis; die Paketdatei muss dort liegen:
 
 ```sh
-npm install --omit=dev ./iobroker.heiko-0.13.0.tgz
+npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
 iobroker add heiko --enabled false
 ```
 
-Der Paketweg wurde mit `--offline` geprüft; der obige Befehl lässt npm bei Bedarf nicht zwischengespeicherte Abhängigkeiten über die konfigurierte Registry beziehen. Dieser Netzwerkabruf wurde nicht separat getestet. Die Instanz wird deaktiviert angelegt. Lege vor dem Start die native Listener-Konfiguration über das etablierte ioBroker-Verfahren des Hosts fest und prüfe sie. Die lokale QA setzte vor dem Start einen Loopback-Listener und installierte, startete und stoppte das gepackte Archiv. Ein Paketinstallationsweg über die Admin-Oberfläche wurde nicht getestet. Umfang und Grenzen stehen unter [Validierung](validation.de.md).
+Der lokale Tarball wurde in einer Debian-13-Entwicklungsinstanz für ioBroker installiert und einem Smoke-Test unterzogen. Ein separates Update von `0.12.3` auf `0.13.1` bestand die dokumentierten passiven Live-Verbindungs-/Ausleseprüfungen; Steuerungen wurden dabei nicht ausgelöst und die Live-Cloud-API wurde nicht getestet. Die Instanz wird deaktiviert angelegt. Lege vor dem Start die native Listener-Konfiguration über das etablierte ioBroker-Verfahren des Hosts fest und prüfe sie. Der Paketinstallationsweg über die Admin-Oberfläche war nicht Teil der dokumentierten Prüfungen. Umfang und Grenzen stehen unter [Validierung](validation.de.md).
 
 ## W600-Bridge konfigurieren
 
@@ -40,9 +40,9 @@ Vor einem Update:
 3. Bei Updates von Versionen vor `0.12.0` Skripte, Aliase, Historien und Dashboards auf alte `parNN`-/`parameters.*`-IDs prüfen; der Katalog verwendet beschreibende `Einstellungen.*`-IDs.
 4. Das authentifizierte Releasepaket installieren und die Instanzkonfiguration vor dem Aktivieren prüfen.
 
-Nach dem Update Instanzgesundheit, Listener, W600-Verbindung, Telemetrieaktualität und Upstream getrennt prüfen. Abhängige Skripte und Steuerungen vor dem Fortsetzen von Automationen kontrollieren.
+Die Aktivierung des Updates startet den Adapter neu und unterbricht W600-/Upstream-Verbindungen kurz. Diese Unterbrechung einplanen; nicht den gesamten ioBroker-Controller neu starten. Eine Mapping-Schema-Aktualisierung kann alte Telemetrie leeren, bis neue gültige Frames eintreffen. Nach dem Update Instanzgesundheit, Listener, W600-Verbindung, Telemetrieaktualität und Upstream getrennt prüfen. Abhängige Skripte und Steuerungen vor dem Fortsetzen von Automationen kontrollieren.
 
-Für einen Rollback das aufbewahrte Adapterpaket über einen geprüften lokalen Paketweg erneut installieren, bei Bedarf die Instanzkonfiguration wiederherstellen, neu starten und dieselben States prüfen. Upgrade von `0.12.3` und Rollback wurden in diesem QA-Lauf nicht ausgeführt; siehe [Validierung](validation.de.md).
+Für einen Rollback das aufbewahrte Adapterpaket über einen lokalen Paketweg erneut installieren, bei Bedarf die Instanzkonfiguration wiederherstellen, neu starten und dieselben States prüfen. Ein Rollback von `0.13.1` wurde nicht getestet; siehe [Validierung](validation.de.md).
 
 Vor der Entfernung den W600-/Netzwerkpfad wiederherstellen, der vor der lokalen Bridge verwendet wurde, falls die Wärmepumpe für ihre MyHeatPump-Verbindung von diesem Adapter abhängt. Danach Instanz stoppen/deaktivieren und abhängige Skripte sowie Objektnutzer prüfen, bevor sie entfernt wird. Die Entfernung einer aktiven Bridge kann Telemetrie und App-Zugriff unterbrechen.
 

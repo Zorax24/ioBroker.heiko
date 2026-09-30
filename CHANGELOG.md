@@ -4,6 +4,7 @@
 
 - Initialize known bridge status and counter values with acknowledged, valid quality metadata instead of retaining object-creation placeholders.
 - Add startup-quality regression coverage for disabled manufacturer forwarding.
+- Refresh English and German installation and operations documentation, including completed passive live upgrade, telemetry and manufacturer-forwarding checks.
 
 ## 0.13.0
 

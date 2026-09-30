@@ -2,7 +2,7 @@
 
 [English](controls.md) | [Deutsch](controls.de.md)
 
-This page describes the adapter's ioBroker controls. Writes can change real heat-pump operation. The adapter is not a safety controller; local software tests are not hardware acceptance.
+This page describes the adapter's ioBroker controls. Writes can change real heat-pump operation. The adapter is not a safety controller; the passive live connection/readout check does not validate actuation or safety on a particular installation.
 
 ## Readiness And Status
 

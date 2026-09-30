@@ -2,7 +2,7 @@
 
 [English](controls.md) | [Deutsch](controls.de.md)
 
-Diese Seite beschreibt die ioBroker-Steuerungen des Adapters. Schreibzugriffe können den realen Wärmepumpenbetrieb ändern. Der Adapter ist keine Sicherheitseinrichtung; lokale Softwaretests sind keine Hardwareabnahme.
+Diese Seite beschreibt die ioBroker-Steuerungen des Adapters. Schreibzugriffe können den realen Wärmepumpenbetrieb ändern. Der Adapter ist keine Sicherheitseinrichtung; die passive Live-Verbindungs-/Ausleseprüfung validiert weder Aktorik noch Sicherheit einer konkreten Anlage.
 
 ## Bereitschaft und Status
 
