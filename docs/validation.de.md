@@ -8,6 +8,8 @@ Die unten aufgeführten Software-, Paket- und lokalen Smoke-Prüfungen für `0.1
 
 ## Abgeschlossene lokale QA
 
+Der Betreiber bestätigt außerdem den erfolgreichen laufenden Produktivbetrieb einschließlich Wärmepumpensteuerung mit dem bestehenden Adapter. Das ist berichtete Betriebserfahrung und von den unten aufgeführten befehlsfreien Wartungsprüfungen für `0.13.1` zu unterscheiden; daraus folgt keine Einzelprüfung jedes Serviceparameters oder jeder Hardwarevariante.
+
 | Prüfung | Ergebnis |
 | --- | --- |
 | Entwicklungsumgebungen | Frischer Windows-QA-Checkout mit Node.js `24.15.0`; Debian-13-Entwicklungsinstanz für Installations-/Smoke-Tests mit Node.js `24.21.0`, npm `11.19.0` |

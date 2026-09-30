@@ -8,6 +8,8 @@ The build, static checks, tests, package checks, and local smoke check below pas
 
 ## Completed Local QA
 
+The operator also confirms successful ongoing productive use and heat-pump control with the existing adapter. This is operational experience reported by the operator, distinct from the coordinator's command-free `0.13.1` maintenance checks below; it is not a claim that every service parameter or hardware variant was individually tested.
+
 | Check | Result |
 | --- | --- |
 | Fresh checkout/dependencies | `npm ci` completed successfully in the isolated QA checkout |

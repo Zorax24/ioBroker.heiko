@@ -14,6 +14,8 @@ Der Adapter nimmt die eingehende TCP-Verbindung des W600 an, kann deren Datenstr
 
 Validiert wurde die gemeldete HEIKO-THERMAL-12-Installation mit W600. Die genaue Regler-/W600-Firmware ist unbekannt; Kompatibilität mit anderen Modellen, Firmwareständen oder optionalen Sensoren wird nicht behauptet.
 
+Der Adapter wird an dieser Anlage dauerhaft produktiv eingesetzt. Der Betreiber bestätigt funktionierende Kommunikation und Steuerung der Wärmepumpe. Auch Version `0.13.1` bestand die Live-Prüfung von Update, Auslesung und Weiterleitung; bei dieser Wartungsprüfung wurden bewusst keine zusätzlichen Schaltbefehle ausgelöst.
+
 ## Schnellstart
 
 ### Voraussetzungen

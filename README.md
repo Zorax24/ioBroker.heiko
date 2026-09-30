@@ -14,6 +14,8 @@ The adapter accepts the W600's inbound TCP connection, can transparently forward
 
 Validated against the reported HEIKO THERMAL 12 installation using a W600. The exact controller/W600 firmware is unknown; compatibility with other models, firmware, or optional sensors is not claimed.
 
+The adapter is in ongoing productive use on that installation. The operator confirms working heat-pump communication and controls. Version `0.13.1` also passed the live upgrade, readout and forwarding check; that maintenance check deliberately issued no additional switching commands.
+
 ## Quick Start
 
 ### Requirements
