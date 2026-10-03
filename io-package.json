@@ -1,8 +1,13 @@
 {
     "common": {
         "name": "heiko",
-        "version": "0.13.1",
+        "version": "0.13.2",
         "news": {
+            "0.13.2": {
+                "en": "Add Polish configuration, object names, descriptions and selection labels while preserving existing IDs and control behavior.",
+                "de": "Polnische Konfiguration, Objektnamen, Beschreibungen und Auswahltexte ergänzt; bestehende IDs und Steuerfunktionen bleiben unverändert.",
+                "pl": "Dodano polską konfigurację, nazwy i opisy obiektów oraz etykiety wyboru. Zachowano istniejące identyfikatory i działanie sterowania."
+            },
             "0.13.1": {
                 "en": "Initialize bridge connection states and counters with valid quality metadata, including disabled manufacturer forwarding.",
                 "de": "Verbindungsstatus und Zähler der Bridge mit gültigen Qualitätsmetadaten initialisieren, auch bei deaktivierter Herstellerweiterleitung."
@@ -78,10 +83,6 @@
             "0.6.0": {
                 "en": "Rebuild the telemetry tree from live operating traces: expose only confirmed temperatures, pressures, compressor, valve, fan, current, voltage, pump and settings; consolidate unknown raw values and remove the invalid CMD01 prefix fault-register interpretation.",
                 "de": "Telemetriebaum anhand echter Betriebsverlaeufe neu aufgebaut: nur bestaetigte Temperaturen, Druecke, Verdichter-, Ventil-, Luefter-, Strom-, Spannungs-, Pumpen- und Einstellwerte, unbekannte Rohwerte zusammengefasst und die falsche Fehlerregister-Deutung des CMD01-Praefixes entfernt."
-            },
-            "0.5.2": {
-                "en": "Add a protected one-shot command that validates and republishes the latest genuine CMD01 realtime and CMD02 settings frames through the active transparent MyHeatPump connection.",
-                "de": "Geschuetzten Einmal-Befehl hinzugefuegt, der die letzten echten CMD01-Echtzeit- und CMD02-Einstellungsframes validiert und ueber die aktive transparente MyHeatPump-Verbindung erneut sendet."
             }
         },
         "titleLang": {
@@ -93,7 +94,7 @@
             "fr": "Heiko Heat Pump",
             "it": "Heiko Heat Pump",
             "es": "Heiko Heat Pump",
-            "pl": "Heiko Heat Pump",
+            "pl": "Pompa ciepła Heiko",
             "uk": "Heiko Heat Pump",
             "zh-cn": "Heiko Heat Pump"
         },
@@ -106,7 +107,7 @@
             "fr": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
             "it": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
             "es": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
-            "pl": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
+            "pl": "Most TCP W600 dla pomp ciepła Heiko/Sprsun/Neoheat z danymi bieżącymi w ioBroker i potwierdzonym sterowaniem bezpośrednim.",
             "uk": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker.",
             "zh-cn": "Runs a W600 TCP bridge for Heiko/Sprsun/Neoheat heat pumps and writes decoded telemetry directly into ioBroker."
         },
@@ -142,12 +143,8 @@
             }
         ]
     },
-    "protectedNative": [
-        "cloudPassword"
-    ],
-    "encryptedNative": [
-        "cloudPassword"
-    ],
+    "protectedNative": ["cloudPassword"],
+    "encryptedNative": ["cloudPassword"],
     "native": {
         "bridgeEnabled": true,
         "listenHost": "0.0.0.0",

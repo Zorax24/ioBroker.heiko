@@ -52,6 +52,9 @@ for (const forbiddenPrefix of ['package/src/', 'package/test/', 'package/tests/'
 for (const required of [
     'package/README.md',
     'package/README.de.md',
+    'package/README.pl.md',
+    'package/admin/i18n/pl.json',
+    'package/build/lib/polish.js',
     'package/MAPPING.md',
     'package/CHANGELOG.md',
     'package/LICENSE',

@@ -1,5 +1,11 @@
 # Validation And Evidence
 
+## Polish Update 0.13.2 (2026-10-03)
+
+Windows / Node.js 24.15.0 / local js-controller 7.2.2: build, type check and lint passed; 26 unit tests, 49 package checks, 7 regression tests and 18 loopback integration tests passed. The local package was installed and started. All 128 parameter objects and their groups were checked for Polish names/descriptions and stable option keys. The package verifier confirms 31 files, 10 runtime JavaScript modules and the Polish Admin resources/guide; no maps, tests, sources or scripts are shipped.
+
+Production dependencies: `npm audit --omit=dev` reported no vulnerabilities. The separate controller/test environment reported dependency audit warnings (2 moderate, 16 high); unrelated dependency upgrades are outside this translation update. Release Gitleaks findings are field labels, not populated device identifiers. No productive instance, hardware or real cloud was accessed for this update. Diagnostic messages retain their existing languages. Polish text has not been independently reviewed by a native-speaking technical translator. Earlier physical-operation evidence below belongs to 0.13.1.
+
 [English](validation.md) | [Deutsch](validation.de.md)
 
 **Version 0.13.1** · **Evidence date:** 2026-09-30

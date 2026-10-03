@@ -1,8 +1,8 @@
-[English](README.md) | [Deutsch](README.de.md)
+[English](README.md) | [Deutsch](README.de.md) | [Polski](README.pl.md)
 
 # ioBroker.heiko
 
-**Version: `0.13.1`**
+**Version: `0.13.2`**
 
 ioBroker-Adapter für HEIKO-Wärmepumpen mit W600-TCP-Schnittstelle. Dieses Repository enthält ausschließlich einen ioBroker-Adapter und keine Home-Assistant-Integration.
 
@@ -35,12 +35,12 @@ Der Adapter wird an einer HEIKO THERMAL 12 dauerhaft produktiv eingesetzt, einsc
 
 ### Release installieren
 
-Lade `iobroker.heiko-0.13.1.tgz` und `SHA256SUMS` von der [Release-Seite `v0.13.1`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1) herunter. Prüfe die Prüfsumme und behalte das Paket als lokale Datei im ioBroker-Controller-Projektverzeichnis. Falls GitHub eine Anmeldung verlangt, verwende ein Konto mit Zugriff auf das Repository. Tokens oder Kontodaten gehören niemals in Installationsbefehle oder Diagnoseberichte.
+Lade `iobroker.heiko-0.13.2.tgz` und `SHA256SUMS` von der [Release-Seite `v0.13.2`](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.2) herunter. Prüfe die Prüfsumme und behalte das Paket als lokale Datei im ioBroker-Controller-Projektverzeichnis. Tokens oder Kontodaten gehören niemals in Installationsbefehle oder Diagnoseberichte.
 
 Der geprüfte lokale Paketweg wird aus diesem Controller-Verzeichnis ausgeführt:
 
 ```sh
-npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
+npm install --omit=dev ./iobroker.heiko-0.13.2.tgz
 iobroker add heiko --enabled false
 ```
 
@@ -110,7 +110,7 @@ Nutze in Skripten und Visualisierungen State-IDs statt Anzeigebezeichnungen. Die
 
 ### Anzeigesprache
 
-Namen, Beschreibungen und Parametergruppen sind auf Deutsch und Englisch hinterlegt. Mit Englisch als Sprache im ioBroker Admin erscheinen englische Anzeigenamen, etwa **Cooling setpoint**, **Compressor frequency** und **Flow temperature setpoint without heating curve**. Auswahltexte enthalten, wo zutreffend, beide Sprachen.
+Namen, Beschreibungen und Parametergruppen sind auf Deutsch, Englisch und Polnisch hinterlegt. Die ioBroker-Admin-Sprache bestimmt die Anzeigenamen. Auf Polnisch erscheinen beispielsweise **Zadana temperatura chłodzenia**, **Częstotliwość sprężarki** und **Zadana temperatura zasilania bez krzywej grzewczej**. Auswahltexte enthalten, wo zutreffend, alle drei Sprachen. Diagnosemeldungen bleiben in ihrer bisherigen deutschen/englischen beziehungsweise Hersteller-/Betriebssystemsprache.
 
 Technische Objekt-IDs werden nicht übersetzt. Beispielsweise erscheint `Einstellungen.HeizKühlkreis1.KühlSolltemperatur` auf Englisch als **Cooling setpoint**, behält aber seine ID, damit Skripte, Aliase, Historien und Dashboards weiter funktionieren. Nutze beim Durchsehen der Objekte die Anzeigenamen-Spalte im Admin.
 

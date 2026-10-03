@@ -9,6 +9,7 @@ const { PARAMETER_BY_STATE_ID, normalizeConfirmedParameterValue } = require('../
 const { PARAMETER_DEFINITIONS, PARAMETER_SECTIONS } = require('../build/lib/parameter-catalog.js');
 const { OBJECT_LOCALIZATION } = require('../build/lib/object-localization.js');
 const { REALTIME_FIELDS, SETTINGS_FIELDS } = require('../build/lib/definition.js');
+const { polishText, polishStates } = require('../build/lib/polish.js');
 const {
     corruptCrc,
     makeCommandFrame,
@@ -18,6 +19,38 @@ const {
 } = require('./helpers/offline-w600.cjs');
 
 describe('offline regressions', () => {
+    it('translates every catalog, telemetry and diagnostic label and description into Polish', () => {
+        const texts = [
+            ...PARAMETER_DEFINITIONS.flatMap((field) => [field.nameEn, field.descriptionEn]),
+            ...PARAMETER_SECTIONS.map((section) => section.nameEn),
+            ...[...REALTIME_FIELDS, ...SETTINGS_FIELDS].flatMap((field) => [field.nameEn, field.descriptionEn]),
+            ...Object.values(OBJECT_LOCALIZATION)
+                .flatMap((text) => [text.name.en, text.desc?.en])
+                .filter(Boolean),
+        ];
+        for (const english of texts) {
+            assert.notEqual(polishText(english), english, `missing Polish translation: ${english}`);
+        }
+        for (const definition of PARAMETER_DEFINITIONS.filter((field) => field.states)) {
+            const translated = polishStates(definition.states);
+            assert.deepEqual(Object.keys(translated), Object.keys(definition.states), 'numeric option IDs stay stable');
+            for (const [key, label] of Object.entries(definition.states)) {
+                assert.ok(translated[key].startsWith(label), 'existing German/English options stay intact');
+                if (!/min\.$/.test(label)) {
+                    assert.notEqual(translated[key], label, `missing Polish option: ${label}`);
+                }
+            }
+        }
+        const fs = require('node:fs');
+        const en = JSON.parse(fs.readFileSync(path.join(__dirname, '../admin/i18n/en.json'), 'utf8'));
+        const pl = JSON.parse(fs.readFileSync(path.join(__dirname, '../admin/i18n/pl.json'), 'utf8'));
+        assert.deepEqual(Object.keys(pl).sort(), Object.keys(en).sort());
+        for (const [key, label] of Object.entries(pl)) {
+            assert.ok(label.trim(), key);
+            assert.notEqual(label, en[key], key);
+        }
+    });
+
     it('provides English and German labels for the complete parameter and telemetry catalog', () => {
         assert.equal(PARAMETER_DEFINITIONS.length, 128);
         for (const field of [...PARAMETER_DEFINITIONS, ...REALTIME_FIELDS, ...SETTINGS_FIELDS]) {

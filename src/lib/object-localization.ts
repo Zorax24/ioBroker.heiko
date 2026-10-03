@@ -1,6 +1,9 @@
+import { polishText } from './polish';
+
 export interface BilingualText {
     en: string;
     de: string;
+    pl?: string;
 }
 
 export interface LocalizedObjectText {
@@ -351,16 +354,18 @@ export const OBJECT_LOCALIZATION: Record<string, LocalizedObjectText> = {
 };
 
 export function localizedName(id: string, fallback: string | BilingualText): BilingualText {
-    return OBJECT_LOCALIZATION[id]?.name ?? (typeof fallback === 'string' ? { en: fallback, de: fallback } : fallback);
+    const text =
+        OBJECT_LOCALIZATION[id]?.name ?? (typeof fallback === 'string' ? { en: fallback, de: fallback } : fallback);
+    return { ...text, pl: text.pl ?? polishText(text.en) };
 }
 
 export function localizedDescription(id: string, fallback?: string | BilingualText): BilingualText | undefined {
     const description = OBJECT_LOCALIZATION[id]?.desc;
     if (description) {
-        return description;
+        return { ...description, pl: description.pl ?? polishText(description.en) };
     }
     if (typeof fallback === 'string') {
-        return { en: fallback, de: fallback };
+        return { en: fallback, de: fallback, pl: polishText(fallback) };
     }
-    return fallback;
+    return fallback ? { ...fallback, pl: fallback.pl ?? polishText(fallback.en) } : undefined;
 }

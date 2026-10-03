@@ -1,5 +1,11 @@
 # Validierung und Belege
 
+## Polnisches Update 0.13.2 (2026-10-03)
+
+Windows / Node.js 24.15.0 / lokaler js-controller 7.2.2: Build, Typprüfung und Lint sowie 26 Unit-Tests, 49 Paketprüfungen, 7 Regressionstests und 18 Loopback-Integrationstests bestanden. Das lokale Paket wurde installiert und gestartet. Alle 128 Parameterobjekte und ihre Gruppen wurden auf polnische Namen/Beschreibungen und stabile Auswahl-IDs geprüft. Der Paketprüfer bestätigt 31 Dateien, 10 JavaScript-Laufzeitmodule und die polnischen Admin-Ressourcen samt Anleitung; keine Maps, Tests, Quellen oder Skripte werden ausgeliefert.
+
+`npm audit --omit=dev` meldete keine Schwachstellen in den Produktivabhängigkeiten. Die separate Controller-/Testumgebung meldete Abhängigkeitswarnungen (2 moderat, 16 hoch); unbeteiligte Abhängigkeitsupdates sind nicht Teil dieses Sprachupdates. Gitleaks-Funde im Release sind Feldbezeichnungen, keine ausgefüllten Gerätekennungen. Keine produktive Instanz, Hardware oder echte Cloud wurde für dieses Update angesprochen. Diagnosemeldungen behalten ihre bisherigen Sprachen. Die polnischen Texte wurden nicht unabhängig von einem muttersprachlichen Fachübersetzer geprüft. Die bisherigen Hardware-Nachweise unten beziehen sich auf 0.13.1.
+
 [English](validation.md) | [Deutsch](validation.de.md)
 
 **Version 0.13.1** · **Belegstand:** 2026-09-30

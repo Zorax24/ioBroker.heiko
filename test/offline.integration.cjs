@@ -11,6 +11,7 @@ const { tests, IntegrationTestHarness } = require('@iobroker/testing');
 const { AdapterSetup } = require('@iobroker/testing/build/tests/integration/lib/adapterSetup');
 const { executeCommand } = require('@iobroker/testing/build/lib/executeCommand');
 const { PARAMETER_DEFINITIONS, PARAMETER_SECTIONS } = require('../build/lib/parameter-catalog.js');
+const { polishText, polishStates } = require('../build/lib/polish.js');
 const {
     FrameReader,
     TEST_MN_A,
@@ -470,6 +471,7 @@ tests.integration(adapterRoot, {
                         {
                             en: definition.nameEn,
                             de: definition.name,
+                            pl: polishText(definition.nameEn),
                         },
                         `${definition.stateId}: language-selectable display name`,
                     );
@@ -478,16 +480,26 @@ tests.integration(adapterRoot, {
                         {
                             en: definition.descriptionEn,
                             de: definition.description,
+                            pl: polishText(definition.descriptionEn),
                         },
                         `${definition.stateId}: language-selectable description`,
                     );
+                    if (definition.states) {
+                        assert.deepEqual(objectCommon(object).states, polishStates(definition.states));
+                    }
                 }
                 for (const section of PARAMETER_SECTIONS) {
                     const object = await harness.objects.getObjectAsync(fullId(`Einstellungen.${section.id}`));
-                    assert.deepEqual(objectCommon(object).name, { en: section.nameEn, de: section.name });
+                    assert.deepEqual(objectCommon(object).name, {
+                        en: section.nameEn,
+                        de: section.name,
+                        pl: polishText(section.nameEn),
+                    });
                 }
                 assert.equal(objectCommon(power).name.en, 'Heat pump on/off');
                 assert.equal(objectCommon(tuo).name.en, 'Flow water temperature Tuo');
+                assert.equal(objectCommon(tuo).name.pl, 'Temperatura zasilania Tuo');
+                assert.equal(objectCommon(power).name.pl, 'Włącz/wyłącz pompę ciepła');
 
                 const ioPackage = JSON.parse(
                     fs.readFileSync(path.join(harness.testAdapterDir, 'io-package.json'), 'utf8'),

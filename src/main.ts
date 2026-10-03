@@ -40,6 +40,7 @@ import { stringifyPayload } from './lib/value';
 import type { ParsedTelemetryValue } from './lib/value';
 import { localizedDescription, localizedName } from './lib/object-localization';
 import type { BilingualText } from './lib/object-localization';
+import { polishStates } from './lib/polish';
 
 interface BridgeSession {
     id: string;
@@ -302,6 +303,7 @@ function localizedStateDescription(
     return {
         en: `Adapter state for ${label.en}.`,
         de: `Adapterstatus für ${label.de}.`,
+        pl: `Stan adaptera: ${label.pl}.`,
     };
 }
 
@@ -2181,7 +2183,7 @@ class Heiko extends utils.Adapter {
             if (this.unloading) {
                 return;
             }
-            await this.extendObjectAsync('control.mode', { common: { states: modeStates } });
+            await this.extendObjectAsync('control.mode', { common: { states: polishStates(modeStates) } });
         }
 
         for (const [id, binding] of [
@@ -2633,7 +2635,7 @@ class Heiko extends utils.Adapter {
             { protocolCommand: 'CMD01', parameter: 'par01', mappingConfidence: 'verified-live' },
         );
         await this.extendObjectAsync('status.activeFunctionCode', {
-            common: { states: { 0: 'Inaktiv / Inactive', 2: 'Heizen / Heating', 3: 'Kühlen / Cooling' } },
+            common: { states: polishStates({ 0: 'Inaktiv / Inactive', 2: 'Heizen / Heating', 3: 'Kühlen / Cooling' }) },
         });
         await this.ensureNumberState(
             'status.effectiveFlowSetpoint',
@@ -2775,7 +2777,7 @@ class Heiko extends utils.Adapter {
             }
             if (field.states) {
                 await this.extendObjectAsync(stateId, {
-                    common: { states: field.states },
+                    common: { states: field.states ? polishStates(field.states) : undefined },
                     native: {
                         protocolCommand: 'CMD02',
                         floatIndex: field.index,
@@ -2973,11 +2975,13 @@ class Heiko extends utils.Adapter {
                 role: 'level.mode',
                 read: true,
                 write: true,
-                states: Object.fromEntries(
-                    Object.entries({ 0: 'Standby', ...DEFAULT_CLOUD_MODE_NAMES }).map(([value, name]) => [
-                        value,
-                        bilingualCloudModeName(name),
-                    ]),
+                states: polishStates(
+                    Object.fromEntries(
+                        Object.entries({ 0: 'Standby', ...DEFAULT_CLOUD_MODE_NAMES }).map(([value, name]) => [
+                            value,
+                            bilingualCloudModeName(name),
+                        ]),
+                    ),
                 ),
                 desc: localizedDescription('control.mode'),
             },
@@ -3269,18 +3273,21 @@ class Heiko extends utils.Adapter {
 
     private async ensureConfirmedParameterState(definition: ConfirmedParameterDefinition): Promise<void> {
         const common: ioBroker.StateCommon = {
-            name: { en: definition.nameEn, de: definition.name },
+            name: localizedName(definition.stateId, { en: definition.nameEn, de: definition.name }),
             type: definition.type,
             role: definition.type === 'boolean' ? 'switch' : definition.pageControl === 'select' ? 'level' : 'value',
             read: true,
             write: definition.writable,
-            desc: { en: definition.descriptionEn, de: definition.description },
+            desc: localizedDescription(definition.stateId, {
+                en: definition.descriptionEn,
+                de: definition.description,
+            }),
         };
         if (definition.type === 'number') {
             common.min = definition.min;
             common.max = definition.max;
             common.step = definition.integer ? 1 : undefined;
-            common.states = definition.states;
+            common.states = definition.states ? polishStates(definition.states) : undefined;
         }
 
         await this.extendObjectAsync(definition.stateId, {

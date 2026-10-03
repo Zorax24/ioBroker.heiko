@@ -1,8 +1,8 @@
-[English](README.md) | [Deutsch](README.de.md)
+[English](README.md) | [Deutsch](README.de.md) | [Polski](README.pl.md)
 
 # ioBroker.heiko
 
-**Version: `0.13.1`**
+**Version: `0.13.2`**
 
 ioBroker adapter for HEIKO heat pumps connected through a W600 TCP interface. This repository contains an ioBroker adapter only; it does not provide a Home Assistant integration.
 
@@ -35,12 +35,12 @@ The adapter is in ongoing productive use on a HEIKO THERMAL 12 installation, inc
 
 ### Release Installation
 
-Download `iobroker.heiko-0.13.1.tgz` and `SHA256SUMS` from the [`v0.13.1` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.1). Verify the checksum and keep the package as a local file in the ioBroker controller project directory. If GitHub requests sign-in, use an account with access to the repository. Never put tokens or account credentials in installation commands or diagnostics.
+Download `iobroker.heiko-0.13.2.tgz` and `SHA256SUMS` from the [`v0.13.2` release page](https://github.com/Zorax24/ioBroker.heiko/releases/tag/v0.13.2). Verify the checksum and keep the package as a local file in the ioBroker controller project directory. Never put tokens or account credentials in installation commands or diagnostics.
 
 The tested local package route, from that controller directory, is:
 
 ```sh
-npm install --omit=dev ./iobroker.heiko-0.13.1.tgz
+npm install --omit=dev ./iobroker.heiko-0.13.2.tgz
 iobroker add heiko --enabled false
 ```
 
@@ -110,7 +110,7 @@ Use state IDs rather than display labels in scripts and visualizations. IDs are 
 
 ### Display language
 
-State names, descriptions, and parameter groups are available in English and German. Select English as your ioBroker Admin language to see English display names, such as **Cooling setpoint**, **Compressor frequency**, and **Flow temperature setpoint without heating curve**. Selection labels include both languages where applicable.
+State names, descriptions, and parameter groups are available in English, German and Polish. Select your ioBroker Admin language to see the corresponding display names. In Polish, examples include **Zadana temperatura chłodzenia**, **Częstotliwość sprężarki** and **Zadana temperatura zasilania bez krzywej grzewczej**. Selection labels include all three languages where applicable. Diagnostic messages remain in their existing English/German or vendor/operating-system language.
 
 Technical object IDs are not translated. For example, `Einstellungen.HeizKühlkreis1.KühlSolltemperatur` displays as **Cooling setpoint** in English, but its ID stays unchanged so scripts, aliases, history, and dashboards keep working. Use the display-name column in Admin when browsing the objects.
 

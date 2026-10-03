@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.2
+
+- Add Polish configuration labels, display names and descriptions for all 128 parameters, telemetry and operating/control states.
+- Add Polish selection labels and a Polish quick-start guide. Existing object IDs, numeric options, ranges and control behavior remain unchanged.
+- Extend offline translation and installed-object checks. Diagnostic messages and vendor/OS errors retain their existing languages.
+
 ## 0.13.1
 
 - Initialize known bridge status and counter values with acknowledged, valid quality metadata instead of retaining object-creation placeholders.
