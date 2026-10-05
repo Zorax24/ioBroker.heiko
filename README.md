@@ -18,6 +18,33 @@ The adapter accepts the W600's inbound TCP connection, can transparently forward
 - Enable transparent bidirectional MyHeatPump forwarding or operate locally with configurable ACK handling.
 - Monitor connections, reconnects and diagnostics without an additional container or MQTT bridge.
 
+## Screenshots
+
+The following pictures show version `0.13.2` in English. The Admin views come from a development instance with neutral, simulated W600 data, not from a user's heat pump. Technical state IDs remain unchanged across languages. `null` means no available value; compressor demand is an inferred compatibility indicator, not a verified independent request bit.
+
+### VIS-Style Example
+
+![English VIS-style example with simulated heat-pump values](docs/images/vis-example-en.png)
+
+This is a layout idea for your own visualization, **not a bundled or importable VIS dashboard**. It has no live connection or control functions. Its [standalone HTML preview](docs/examples/vis-preview.html) supports `?lang=en`, `?lang=de` and `?lang=pl` when opened locally.
+
+<details>
+<summary>Adapter configuration, measurements and operating states</summary>
+
+**Adapter configuration:** Safe offline development settings, not recommended settings for a real W600 connection. Accounts and device identifiers are empty; all connections and controls are disabled. Use the connection instructions below for your installation.
+
+![English adapter configuration](docs/images/config-en.png)
+
+**Created measurement states:** Names, descriptions, units and synthetic values as displayed by ioBroker Admin.
+
+![English measurement data points](docs/images/data-en.png)
+
+**Operating states:** Derived and measured indicators; missing simulator inputs remain `null`.
+
+![English operating-state data points](docs/images/status-en.png)
+
+</details>
+
 ## Compatibility
 
 Validated against the reported HEIKO THERMAL 12 installation using a W600. The exact controller/W600 firmware is unknown; compatibility with other models, firmware, or optional sensors is not claimed.

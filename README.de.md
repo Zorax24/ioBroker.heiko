@@ -18,6 +18,33 @@ Der Adapter nimmt die eingehende TCP-Verbindung des W600 an, kann deren Datenstr
 - Transparente MyHeatPump-Weiterleitung in beide Richtungen aktivieren oder mit konfigurierbarer ACK-Behandlung lokal arbeiten.
 - Verbindungen, Wiederverbindungen und Diagnosen ohne zusätzlichen Container oder MQTT-Bridge überwachen.
 
+## Bilder
+
+Die folgenden Bilder zeigen Version `0.13.2` auf Deutsch. Die Admin-Ansichten stammen aus einer Entwicklungsinstanz mit neutralen, simulierten W600-Daten, nicht aus einer privaten Wärmepumpe. Technische Datenpunkt-IDs bleiben in allen Sprachen identisch. `null` bedeutet, dass kein Wert verfügbar ist; die Verdichteranforderung ist ein abgeleiteter Kompatibilitätswert, kein bestätigtes unabhängiges Anforderungsbit.
+
+### VIS-Gestaltungsbeispiel
+
+![Deutsches VIS-Gestaltungsbeispiel mit simulierten Wärmepumpenwerten](docs/images/vis-example-de.png)
+
+Dies ist eine Gestaltungsidee für eine eigene Visualisierung, **kein mitgeliefertes oder importierbares VIS-Dashboard**. Sie besitzt keine Live-Verbindung und keine Steuerfunktionen. Die [eigenständige HTML-Vorschau](docs/examples/vis-preview.html) unterstützt beim lokalen Öffnen `?lang=de`, `?lang=en` und `?lang=pl`.
+
+<details>
+<summary>Adapterkonfiguration, Messwerte und Betriebszustände</summary>
+
+**Adapterkonfiguration:** Sichere Offline-Entwicklungseinstellungen, keine empfohlenen Einstellungen für eine echte W600-Verbindung. Konten und Gerätekennungen sind leer; sämtliche Verbindungen und Steuerungen sind deaktiviert. Für deine Installation gelten die Anschlussanweisungen weiter unten.
+
+![Deutsche Adapterkonfiguration](docs/images/config-de.png)
+
+**Erzeugte Messwert-Datenpunkte:** Namen, Beschreibungen, Einheiten und simulierte Werte in ioBroker Admin.
+
+![Deutsche Messwert-Datenpunkte](docs/images/data-de.png)
+
+**Betriebszustände:** Abgeleitete und gemessene Anzeigen; fehlende Simulator-Eingaben bleiben `null`.
+
+![Deutsche Betriebszustands-Datenpunkte](docs/images/status-de.png)
+
+</details>
+
 ## Kompatibilität
 
 Validiert wurde die gemeldete HEIKO-THERMAL-12-Installation mit W600. Die genaue Regler-/W600-Firmware ist unbekannt; Kompatibilität mit anderen Modellen, Firmwareständen oder optionalen Sensoren wird nicht behauptet.

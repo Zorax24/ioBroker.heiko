@@ -16,6 +16,33 @@ Projekt powstał z pomocą AI w podejściu vibe-coding. Informacje o wykonanych 
 - Opcjonalne dwukierunkowe przekazywanie danych do MyHeatPump, ponowne połączenia i diagnostyka.
 - Bez dodatkowego kontenera ani mostu MQTT.
 
+## Zrzuty ekranu
+
+Poniższe obrazy przedstawiają wersję `0.13.2` po polsku. Widoki Admin pochodzą z instancji deweloperskiej z neutralnymi, symulowanymi danymi W600, a nie z prywatnej pompy ciepła. Techniczne identyfikatory punktów danych pozostają takie same we wszystkich językach. `null` oznacza brak dostępnej wartości; zapotrzebowanie na sprężarkę jest wskaźnikiem wywnioskowanym, a nie potwierdzonym niezależnym bitem żądania.
+
+### Przykładowy układ VIS
+
+![Polski przykładowy układ VIS z symulowanymi wartościami pompy ciepła](docs/images/vis-example-pl.png)
+
+To pomysł na własną wizualizację, **nie gotowy ani importowalny dashboard VIS**. Nie ma połączenia na żywo ani funkcji sterowania. [Samodzielny podgląd HTML](docs/examples/vis-preview.html) obsługuje przy otwarciu lokalnym `?lang=pl`, `?lang=en` i `?lang=de`.
+
+<details>
+<summary>Konfiguracja adaptera, pomiary i stany pracy</summary>
+
+**Konfiguracja adaptera:** Bezpieczne ustawienia deweloperskie offline, nie zalecana konfiguracja rzeczywistego połączenia W600. Konta i identyfikatory urządzeń są puste; wszystkie połączenia i funkcje sterowania są wyłączone. Podczas konfiguracji własnej instalacji skorzystaj z instrukcji poniżej.
+
+![Polska konfiguracja adaptera](docs/images/config-pl.png)
+
+**Utworzone punkty pomiarowe:** Nazwy, opisy, jednostki i symulowane wartości w ioBroker Admin.
+
+![Polskie punkty danych pomiarowych](docs/images/data-pl.png)
+
+**Stany pracy:** Wskaźniki mierzone i wywnioskowane; brakujące dane symulatora pozostają `null`.
+
+![Polskie punkty danych stanu pracy](docs/images/status-pl.png)
+
+</details>
+
 ## Wymagania i zgodność
 
 Node.js 20 lub nowszy, js-controller co najmniej 6.0.11 i Admin co najmniej 7.6.20. Szczegółowe wersje faktycznie przetestowane opisano w [raporcie walidacji](docs/validation.md).
